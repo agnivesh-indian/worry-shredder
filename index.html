@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0e1119" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f7fb" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>Worry Shredder · Release & Reset</title>
+<style>
+  /* ============ THEME TOKENS ============ */
+  :root {
+    --bg: #f4f6fb;
+    --bg-grad-1: #e6ecf7;
+    --bg-grad-2: #d9e3f2;
+    --surface: #ffffff;
+    --surface-2: #eef2f9;
+    --surface-3: #e2e9f4;
+    --border: rgba(60, 80, 130, 0.1);
+    --border-strong: rgba(60, 80, 130, 0.2);
+    --text: #0f1626;
+    --text-2: #48547a;
+    --text-3: #8590b0;
+    --accent: #4f5fe8;
+    --accent-2: #7c4dff;
+    --accent-grad: linear-gradient(135deg, #4f5fe8, #7c4dff);
+    --success: #0ea968;
+    --danger: #e5484d;
+    --paper-bg: #fdfbf3;
+    --paper-bg-2: #f8f3e2;
+    --paper-text: #2a2d45;
+    --paper-tape: rgba(255, 220, 130, 0.6);
+    --shredder-1: #333a5c;
+    --shredder-2: #1e2338;
+    --shredder-slot: #06080f;
+    --shadow-xs: 0 1px 2px rgba(30, 50, 90, 0.05);
+    --shadow-sm: 0 2px 6px rgba(30, 50, 90, 0.08);
+    --shadow-md: 0 8px 20px -6px rgba(30, 50, 90, 0.15);
+    --shadow-lg: 0 20px 40px -12px rgba(30, 50, 90, 0.25);
+    --shadow-xl: 0 30px 60px -20px rgba(30, 50, 90, 0.35);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 26px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    color-scheme: light;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0b0e17;
+    --bg-grad-1: #141a2e;
+    --bg-grad-2: #080b14;
+    --surface: #171c2c;
+    --surface-2: #1f2538;
+    --surface-3: #293048;
+    --border: rgba(140, 160, 220, 0.12);
+    --border-strong: rgba(140, 160, 220, 0.24);
+    --text: #eaefff;
+    --text-2: #a3adcf;
+    --text-3: #6873a3;
+    --accent: #6b7bf0;
+    --accent-2: #9d7bff;
+    --accent-grad: linear-gradient(135deg, #6b7bf0, #9d7bff);
+    --success: #34d399;
+    --danger: #f87171;
+    --paper-bg: #fdfbf3;
+    --paper-bg-2: #f8f3e2;
+    --paper-text: #2a2d45;
+    --paper-tape: rgba(255, 240, 180, 0.5);
+    --shredder-1: #333a5c;
+    --shredder-2: #14182a;
+    --shredder-slot: #03050a;
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 20px -6px rgba(0, 0, 0, 0.55);
+    --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.65);
+    --shadow-xl: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
+    color-scheme: dark;
+  }
+
+  /* ============ RESET ============ */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    height: 100%;
+    overscroll-behavior: none;
+  }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 12% 15%, var(--bg-grad-1) 0%, transparent 42%),
+      radial-gradient(circle at 88% 80%, var(--bg-grad-2) 0%, transparent 48%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s, color 0.3s;
+    overflow: hidden;
+    position: fixed;
+    inset: 0;
+    touch-action: manipulation;
+  }
+
+  /* ============ APP SHELL ============ */
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    padding:
+      calc(var(--safe-top) + 10px)
+      calc(var(--safe-right) + 14px)
+      calc(var(--safe-bottom) + 10px)
+      calc(var(--safe-left) + 14px);
+    gap: 10px;
+  }
+
+  /* ============ HEADER ============ */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 2px;
+    flex-shrink: 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: var(--accent-grad);
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    box-shadow: 0 6px 16px -6px var(--accent);
+    flex-shrink: 0;
+  }
+
+  .brand-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.15;
+  }
+
+  .brand-sub {
+    font-size: 10.5px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s, color 0.2s, border-color 0.2s;
+    font-size: 17px;
+    -webkit-user-select: none;
+    user-select: none;
+    font-family: inherit;
+  }
+
+  .icon-btn:hover { background: var(--surface-2); color: var(--text); }
+  .icon-btn:active { transform: scale(0.92); }
+
+  /* ============ STATS STRIP ============ */
+  .stats {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .stat-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 9px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    box-shadow: var(--shadow-xs);
+    min-width: 0;
+  }
+
+  .stat-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--text-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s;
+  }
+
+  .stat-value.bump { animation: bump 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  @keyframes bump {
+    0% { transform: scale(1); }
+    45% { transform: scale(1.22); color: var(--success); }
+    100% { transform: scale(1); }
+  }
+
+  /* ============ INPUT ZONE ============ */
+  .input-zone {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .input-zone:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(79, 95, 232, 0.1), var(--shadow-sm);
+  }
+
+  .worry-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    resize: none;
+    height: 44px;
+    line-height: 1.4;
+    padding: 2px 4px;
+    transition: height 0.2s;
+  }
+
+  .worry-input::placeholder { color: var(--text-3); }
+
+  .input-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 2px;
+  }
+
+  .input-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--text-3);
+    font-weight: 500;
+  }
+
+  .char-count { font-variant-numeric: tabular-nums; }
+  .char-count.warn { color: var(--danger); }
+
+  .add-btn {
+    background: var(--accent-grad);
+    border: none;
+    border-radius: 11px;
+    padding: 9px 18px;
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+    box-shadow: 0 6px 14px -6px var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    -webkit-user-select: none;
+    user-select: none;
+    font-family: inherit;
+    letter-spacing: 0.01em;
+  }
+
+  .add-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 20px -8px var(--accent); }
+  .add-btn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+  .add-btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+
+  /* ============ PLAYGROUND ============ */
+  .playground {
+    position: relative;
+    flex: 1;
+    min-height: 160px;
+    border-radius: var(--radius-lg);
+    background: var(--surface-2);
+    border: 1.5px dashed var(--border-strong);
+    overflow: hidden;
+    transition: background 0.25s, border-color 0.25s;
+    touch-action: none;
+  }
+
+  .playground.drag-active {
+    background: var(--surface-3);
+    border-color: var(--accent);
+  }
+
+  .empty-hint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-3);
+    font-size: 12.5px;
+    gap: 8px;
+    pointer-events: none;
+    text-align: center;
+    padding: 20px;
+    transition: opacity 0.3s;
+    line-height: 1.45;
+  }
+
+  .empty-hint .big { font-size: 28px; opacity: 0.55; }
+  .empty-hint.hidden { opacity: 0; }
+
+  /* ============ PAPER NOTES ============ */
+  .paper {
+    position: absolute;
+    width: 116px;
+    min-height: 78px;
+    max-height: 128px;
+    background: var(--paper-bg);
+    color: var(--paper-text);
+    border-radius: 3px;
+    padding: 13px 10px 7px;
+    font-size: 12px;
+    line-height: 1.35;
+    box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(0,0,0,0.03);
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    display: flex;
+    flex-direction: column;
+    word-break: break-word;
+    will-change: transform, left, top;
+    z-index: 10;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  }
+
+  .paper::before {
+    content: '';
+    position: absolute;
+    top: -4px; left: 50%;
+    transform: translateX(-50%);
+    width: 32px; height: 8px;
+    background: var(--paper-tape);
+    border-radius: 1.5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+
+  .paper::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 0 12px 12px;
+    border-color: transparent transparent var(--paper-bg-2) transparent;
+    border-radius: 0 0 3px 0;
+    opacity: 0.7;
+  }
+
+  .paper .text {
+    flex: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    padding-top: 2px;
+    padding-right: 2px;
+  }
+
+  .paper .hint {
+    font-size: 8.5px;
+    color: #a8a291;
+    margin-top: 4px;
+    text-align: right;
+    letter-spacing: 0.02em;
+    font-weight: 500;
+  }
+
+  .paper.dragging {
+    cursor: grabbing;
+    opacity: 0.95;
+    box-shadow: var(--shadow-xl);
+    z-index: 500;
+  }
+
+  .paper.destroying {
+    animation: shred 0.45s cubic-bezier(0.6, 0, 0.9, 0.5) forwards;
+    pointer-events: none;
+  }
+
+  @keyframes shred {
+    0%   { transform: scale(1) rotate(0); opacity: 1; }
+    35%  { transform: scale(0.7, 1.15) rotate(-1deg); opacity: 0.9; }
+    100% { transform: scale(0.08, 0.04) translateY(30px) rotate(2deg); opacity: 0; }
+  }
+
+  /* ============ SHREDDER ============ */
+  .shredder-wrap {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .shredder {
+    position: relative;
+    width: min(260px, 78vw);
+    height: 82px;
+    background: linear-gradient(180deg, var(--shredder-1) 0%, var(--shredder-2) 100%);
+    border-radius: 16px 16px 10px 10px;
+    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.07);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+    transition: box-shadow 0.25s, border-color 0.25s, transform 0.15s;
+    cursor: default;
+    overflow: hidden;
+  }
+
+  .shredder::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 45%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), transparent);
+    pointer-events: none;
+  }
+
+  .shredder.active {
+    border-color: rgba(255, 120, 120, 0.55);
+    box-shadow: 0 0 45px -5px rgba(255, 90, 90, 0.6), var(--shadow-lg);
+    animation: shake 0.35s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-2.5px) rotate(-0.5deg); }
+    40% { transform: translateX(2.5px) rotate(0.5deg); }
+    60% { transform: translateX(-1.5px); }
+    80% { transform: translateX(1.5px); }
+  }
+
+  .slot {
+    position: absolute;
+    top: 9px;
+    width: min(180px, 56vw);
+    height: 15px;
+    background: var(--shredder-slot);
+    border-radius: 8px;
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.9), inset 0 -1px 0 rgba(255,255,255,0.04);
+    overflow: hidden;
+  }
+
+  .slot-teeth {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    gap: 3px;
+    padding: 0 4px;
+    align-items: center;
+  }
+
+  .slot-teeth span {
+    flex: 1;
+    height: 100%;
+    background: repeating-linear-gradient(90deg, #2a2f4a 0 2px, #171a2b 2px 4px);
+    border-radius: 1px;
+    opacity: 0.85;
+  }
+
+  .shredder.active .slot-teeth span {
+    animation: teeth 0.18s linear infinite;
+  }
+
+  @keyframes teeth {
+    0% { background-position: 0 0; }
+    100% { background-position: 4px 0; }
+  }
+
+  .led {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success), 0 0 2px #fff;
+    position: absolute;
+    top: 34px; right: 18px;
+    transition: 0.2s;
+  }
+
+  .shredder.active .led {
+    background: var(--danger);
+    box-shadow: 0 0 14px var(--danger), 0 0 3px #fff;
+  }
+
+  .shredder-label {
+    color: var(--text-3);
+    font-size: 8.5px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+    z-index: 1;
+  }
+
+  .shredder-base {
+    width: min(230px, 70vw);
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+    border-radius: 4px;
+    margin-top: 3px;
+  }
+
+  .shredder-hint {
+    margin-top: 7px;
+    color: var(--text-3);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    height: 15px;
+    font-weight: 500;
+    transition: 0.25s;
+    text-align: center;
+  }
+
+  .shredder-hint.ready { color: var(--accent-2); font-weight: 700; }
+
+  /* ============ PARTICLES ============ */
+  .particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1000;
+  }
+
+  .strip {
+    position: absolute;
+    width: 7px;
+    height: 12px;
+    background: var(--paper-bg);
+    border-radius: 1px;
+    opacity: 0.9;
+    animation: fall 0.9s linear forwards;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(160px) rotate(340deg); opacity: 0; }
+  }
+
+  .confetti {
+    position: absolute;
+    width: 6px; height: 6px;
+    border-radius: 1px;
+    animation: conf 1s ease-out forwards;
+    pointer-events: none;
+  }
+
+  @keyframes conf {
+    0% { transform: translate(0,0) rotate(0); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) rotate(400deg); opacity: 0; }
+  }
+
+  /* ============ TOAST ============ */
+  .toast {
+    position: fixed;
+    bottom: calc(var(--safe-bottom) + 22px);
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: calc(100vw - 40px);
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ============ MODAL (Settings) ============ */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 540px;
+    padding: 12px 20px calc(var(--safe-bottom) + 22px);
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 -12px 45px rgba(0,0,0,0.35);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-backdrop.show .modal { transform: translateY(0); }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border-strong);
+    border-radius: 4px;
+    margin: 0 auto 16px;
+  }
+
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+    letter-spacing: -0.01em;
+  }
+
+  .modal-sub {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-bottom: 20px;
+  }
+
+  .setting-group {
+    margin-bottom: 20px;
+  }
+
+  .setting-group:last-child { margin-bottom: 0; }
+
+  .setting-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 12px;
+    margin-bottom: 6px;
+    transition: background 0.2s;
+    cursor: pointer;
+    border: 1px solid transparent;
+    gap: 12px;
+  }
+
+  .setting-row:hover { background: var(--surface-3); }
+
+  .setting-row-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .setting-row-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .setting-row-desc {
+    font-size: 11px;
+    color: var(--text-3);
+    line-height: 1.35;
+  }
+
+  .toggle {
+    width: 42px;
+    height: 25px;
+    background: var(--surface-3);
+    border-radius: 40px;
+    position: relative;
+    transition: background 0.25s;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 19px; height: 19px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle.on { background: var(--accent); border-color: var(--accent); }
+  .toggle.on::after { transform: translateX(17px); }
+
+  .theme-segmented {
+    display: flex;
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .theme-opt {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: 9px;
+    background: transparent;
+    border: none;
+    color: var(--text-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: inherit;
+  }
+
+  .theme-opt.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .about-text {
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.6;
+    background: var(--surface-2);
+    padding: 14px;
+    border-radius: 12px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .about-text strong { color: var(--text); }
+
+  .danger-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .danger-btn:hover { background: rgba(229, 72, 77, 0.08); }
+  .danger-btn:active { transform: scale(0.98); }
+
+  /* ============ QUICK ACTIONS BAR ============ */
+  .quick-bar {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .quick-btn {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 10px 8px;
+    color: var(--text-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s, color 0.2s, border-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: inherit;
+    -webkit-user-select: none;
+    user-select: none;
+    letter-spacing: 0.01em;
+  }
+
+  .quick-btn:hover { background: var(--surface-2); color: var(--text); }
+  .quick-btn:active { transform: scale(0.97); }
+  .quick-btn.danger:hover { color: var(--danger); border-color: var(--danger); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-height: 660px) {
+    .stats { display: none; }
+    .shredder { height: 72px; }
+    .playground { min-height: 120px; }
+  }
+
+  @media (max-width: 380px) {
+    .paper { width: 104px; font-size: 11px; padding: 11px 9px 6px; }
+    .add-btn { padding: 9px 14px; font-size: 12px; }
+    .brand-sub { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-icon">📝</div>
+      <div class="brand-text">
+        <div class="brand-title">Worry Shredder</div>
+        <div class="brand-sub">release · reset</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙️</button>
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Released</div>
+      <div class="stat-value" id="countReleased">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pending</div>
+      <div class="stat-value" id="countPending">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Streak</div>
+      <div class="stat-value" id="streakCount">0</div>
+    </div>
+  </div>
+
+  <!-- INPUT -->
+  <div class="input-zone">
+    <textarea class="worry-input" id="worryInput" maxlength="140" rows="1"
+      placeholder="What's on your mind? Write it down…"
+      aria-label="Write your worry"
+      enterkeyhint="done"
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="false"></textarea>
+    <div class="input-footer">
+      <div class="input-meta">
+        <span class="char-count" id="charCount">0 / 140</span>
+      </div>
+      <button class="add-btn" id="addBtn" disabled>
+        <span>＋</span> Add note
+      </button>
+    </div>
+  </div>
+
+  <!-- PLAYGROUND -->
+  <div class="playground" id="playground">
+    <div class="empty-hint" id="emptyHint">
+      <div class="big">📌</div>
+      <div>Your worries appear here as notes.<br>Drag one into the shredder to release it.</div>
+    </div>
+  </div>
+
+  <!-- SHREDDER -->
+  <div class="shredder-wrap">
+    <div class="shredder" id="shredder">
+      <div class="led"></div>
+      <div class="shredder-label">SHREDDER 3000</div>
+      <div class="slot">
+        <div class="slot-teeth" id="slotTeeth"></div>
+      </div>
+    </div>
+    <div class="shredder-base"></div>
+    <div class="shredder-hint" id="shredderHint">drag a note here</div>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="quick-bar">
+    <button class="quick-btn" id="quickAddBtn">
+      <span>✨</span> Quick add
+    </button>
+    <button class="quick-btn danger" id="clearAllBtn">
+      <span>🗑️</span> Clear all
+    </button>
+  </div>
+
+</div>
+
+<!-- PARTICLES LAYER -->
+<div class="particles" id="particles"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-backdrop" id="settingsBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Settings</div>
+    <div class="modal-sub">Personalize your shredding experience</div>
+
+    <div class="setting-group">
+      <span class="setting-label">Appearance</span>
+      <div class="theme-segmented" id="themeSegmented">
+        <button class="theme-opt" data-theme="light">☀️ Light</button>
+        <button class="theme-opt" data-theme="dark">🌙 Dark</button>
+        <button class="theme-opt" data-theme="system">⚙️ Auto</button>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <span class="setting-label">Feedback</span>
+      <div class="setting-row" data-setting="sound">
+        <div class="setting-row-text">
+          <span class="setting-row-title">Sound effects</span>
+          <span class="setting-row-desc">Subtle zip when shredding</span>
+        </div>
+        <div class="toggle" id="toggleSound"></div>
+      </div>
+      <div class="setting-row" data-setting="haptics">
+        <div class="setting-row-text">
+          <span class="setting-row-title">Haptic feedback</span>
+          <span class="setting-row-desc">Vibration on mobile devices</span>
+        </div>
+        <div class="toggle" id="toggleHaptics"></div>
+      </div>
+      <div class="setting-row" data-setting="confetti">
+        <div class="setting-row-text">
+          <span class="setting-row-title">Celebration effects</span>
+          <span class="setting-row-desc">Confetti when shredding</span>
+        </div>
+        <div class="toggle" id="toggleConfetti"></div>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <span class="setting-label">About</span>
+      <div class="about-text">
+        <strong>Worry Shredder</strong> is a simple therapeutic tool based on
+        externalization and release — techniques used in CBT and ACT.
+        Writing worries down and physically "destroying" them can reduce
+        rumination and provide a sense of closure. <br><br>
+        Not a replacement for professional care. If stress is persistent,
+        please reach out to a licensed mental health professional.
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <button class="danger-btn" id="clearHistoryBtn">
+        🗑️ Reset all data & counters
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ============================================================
+     STATE
+     ============================================================ */
+  const state = {
+    theme: 'system',
+    sound: true,
+    haptics: true,
+    confetti: true,
+    countReleased: 0,
+    lastReleaseTime: 0,
+    streak: 0,
+  };
+
+  const STORAGE_KEY = 'worryShredder.v2';
+  const STREAK_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+
+  /* ============================================================
+     DOM REFS
+     ============================================================ */
+  const $ = id => document.getElementById(id);
+
+  const playground     = $('playground');
+  const emptyHint      = $('emptyHint');
+  const worryInput     = $('worryInput');
+  const addBtn         = $('addBtn');
+  const charCount      = $('charCount');
+  const shredder       = $('shredder');
+  const shredderHint   = $('shredderHint');
+  const slotTeeth      = $('slotTeeth');
+  const particlesEl    = $('particles');
+  const countReleased  = $('countReleased');
+  const countPending   = $('countPending');
+  const streakCount    = $('streakCount');
+  const toast          = $('toast');
+  const settingsBtn    = $('settingsBtn');
+  const settingsBackdrop = $('settingsBackdrop');
+  const themeSegmented = $('themeSegmented');
+  const toggleSound    = $('toggleSound');
+  const toggleHaptics  = $('toggleHaptics');
+  const toggleConfetti = $('toggleConfetti');
+  const clearHistoryBtn = $('clearHistoryBtn');
+  const quickAddBtn    = $('quickAddBtn');
+  const clearAllBtn    = $('clearAllBtn');
+
+  /* ============================================================
+     SLOT TEETH
+     ============================================================ */
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement('span');
+    slotTeeth.appendChild(s);
+  }
+
+  /* ============================================================
+     STORAGE
+     ============================================================ */
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw);
+        Object.assign(state, saved);
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        theme: state.theme,
+        sound: state.sound,
+        haptics: state.haptics,
+        confetti: state.confetti,
+        countReleased: state.countReleased,
+        lastReleaseTime: state.lastReleaseTime,
+        streak: state.streak,
+      }));
+    } catch (e) { /* ignore */ }
+  }
+
+  /* ============================================================
+     THEME
+     ============================================================ */
+  function applyTheme() {
+    const root = document.documentElement;
+    let effective = state.theme;
+    if (state.theme === 'system') {
+      effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    root.setAttribute('data-theme', effective);
+
+    themeSegmented.querySelectorAll('.theme-opt').forEach(b => {
+      b.classList.toggle('active', b.dataset.theme === state.theme);
+    });
+  }
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (state.theme === 'system') applyTheme();
+  });
+
+  themeSegmented.addEventListener('click', (e) => {
+    const btn = e.target.closest('.theme-opt');
+    if (!btn) return;
+    state.theme = btn.dataset.theme;
+    applyTheme();
+    saveState();
+    haptic(8);
+  });
+
+  /* ============================================================
+     HAPTIC + SOUND
+     ============================================================ */
+  function haptic(ms = 10) {
+    if (!state.haptics) return;
+    if (navigator.vibrate) {
+      try { navigator.vibrate(ms); } catch (e) {}
+    }
+  }
+
+  let audioCtx = null;
+  function ensureAudio() {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    } catch (e) { return null; }
+  }
+
+  function playShredSound() {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+
+    try {
+      const duration = 0.28;
+      const bufferSize = ctx.sampleRate * duration;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2.2);
+      }
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(1400, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(380, ctx.currentTime + duration);
+      filter.Q.value = 1.8;
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.14, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+      source.connect(filter).connect(gain).connect(ctx.destination);
+      source.start();
+    } catch (e) { /* ignore */ }
+  }
+
+  function playSuccessSound() {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      const notes = [523.25, 659.25, 783.99];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, now + i * 0.08);
+        gain.gain.linearRampToValueAtTime(0.08, now + i * 0.08 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.32);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now + i * 0.08);
+        osc.stop(now + i * 0.08 + 0.38);
+      });
+    } catch (e) { /* ignore */ }
+  }
+
+  /* ============================================================
+     TOAST
+     ============================================================ */
+  let toastTimer = null;
+  function showToast(msg, emoji = '✨') {
+    toast.innerHTML = `<span>${emoji}</span><span>${msg}</span>`;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  /* ============================================================
+     COUNTERS
+     ============================================================ */
+  function updateCounters() {
+    countReleased.textContent = state.countReleased;
+    const pending = playground.querySelectorAll('.paper:not(.destroying)').length;
+    countPending.textContent = pending;
+    streakCount.textContent = state.streak;
+  }
+
+  function bumpEl(el) {
+    el.classList.remove('bump');
+    void el.offsetWidth;
+    el.classList.add('bump');
+  }
+
+  /* ============================================================
+     STREAK LOGIC
+     ============================================================ */
+  function updateStreak() {
+    const now = Date.now();
+    if (state.lastReleaseTime && (now - state.lastReleaseTime) < STREAK_WINDOW_MS) {
+      state.streak++;
+    } else {
+      state.streak = 1;
+    }
+    state.lastReleaseTime = now;
+    streakCount.textContent = state.streak;
+    bumpEl(streakCount);
+
+    if (state.streak === 3) showToast('3 in a row — nice rhythm.', '🔥');
+    if (state.streak === 7) showToast('7-shred streak!', '⚡');
+    if (state.streak === 15) showToast('15 shredded in a row!', '🌟');
+  }
+
+  /* ============================================================
+     ADD WORRY
+     ============================================================ */
+  addBtn.addEventListener('click', addWorry);
+  worryInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey || !window.matchMedia('(pointer: coarse)').matches)) {
+      e.preventDefault();
+      addWorry();
+    }
+  });
+  worryInput.addEventListener('input', () => {
+    const len = worryInput.value.length;
+    charCount.textContent = `${len} / 140`;
+    charCount.classList.toggle('warn', len > 120);
+    addBtn.disabled = worryInput.value.trim().length === 0;
+    worryInput.style.height = 'auto';
+    worryInput.style.height = Math.min(120, Math.max(44, worryInput.scrollHeight)) + 'px';
+  });
+
+  function addWorry() {
+    const text = worryInput.value.trim();
+    if (!text) return;
+
+    createPaper(text);
+    worryInput.value = '';
+    worryInput.style.height = '44px';
+    charCount.textContent = '0 / 140';
+    charCount.classList.remove('warn');
+    addBtn.disabled = true;
+
+    if (window.matchMedia('(pointer: fine)').matches) worryInput.focus();
+    haptic(8);
+    updateCounters();
+  }
+
+  function createPaper(text) {
+    const paper = document.createElement('div');
+    paper.className = 'paper';
+    paper.dataset.id = 'w' + Date.now() + Math.random().toString(36).slice(2, 6);
+    paper.innerHTML = `
+      <div class="text">${escapeHtml(text)}</div>
+      <div class="hint">drag → shred</div>
+    `;
+
+    const pw = playground.clientWidth;
+    const ph = playground.clientHeight;
+    const cardW = paper.offsetWidth || 116;
+    const cardH = paper.offsetHeight || 78;
+    const maxX = Math.max(8, pw - cardW - 8);
+    const maxY = Math.max(8, ph - cardH - 8);
+    const x = 8 + Math.random() * maxX;
+    const y = 8 + Math.random() * maxY;
+    paper.style.left = x + 'px';
+    paper.style.top = y + 'px';
+    paper.style.transform = `rotate(${(Math.random() * 6 - 3).toFixed(1)}deg)`;
+
+    playground.appendChild(paper);
+    emptyHint.classList.add('hidden');
+
+    makeDraggable(paper);
+    return paper;
+  }
+
+  function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  /* ============================================================
+     DRAG LOGIC
+     ============================================================ */
+  function makeDraggable(el) {
+    let startX, startY, origX, origY, pointerId = null;
+    let moved = false;
+
+    el.addEventListener('pointerdown', (e) => {
+      if (el.classList.contains('destroying')) return;
+      e.preventDefault();
+
+      pointerId = e.pointerId;
+      try { el.setPointerCapture(pointerId); } catch (err) {}
+
+      moved = false;
+      startX = e.clientX;
+      startY = e.clientY;
+      origX = el.offsetLeft;
+      origY = el.offsetTop;
+
+      el.classList.add('dragging');
+      el.style.transform = 'rotate(0deg) scale(1.05)';
+      el.style.zIndex = 500;
+      playground.classList.add('drag-active');
+      haptic(5);
+    });
+
+    el.addEventListener('pointermove', (e) => {
+      if (pointerId !== e.pointerId) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      if (!moved && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) moved = true;
+
+      const pw = playground.clientWidth - el.offsetWidth;
+      const ph = playground.clientHeight - el.offsetHeight;
+      const nx = Math.min(pw, Math.max(0, origX + dx));
+      const ny = Math.min(ph, Math.max(0, origY + dy));
+
+      el.style.left = nx + 'px';
+      el.style.top  = ny + 'px';
+
+      if (isOverShredder(e.clientX, e.clientY)) {
+        shredder.classList.add('active');
+        shredderHint.classList.add('ready');
+        shredderHint.textContent = 'release to shred ✦';
+      } else {
+        shredder.classList.remove('active');
+        shredderHint.classList.remove('ready');
+        shredderHint.textContent = 'drag a note here';
+      }
+    });
+
+    function endDrag(e) {
+      if (pointerId !== e.pointerId) return;
+      try { el.releasePointerCapture(pointerId); } catch (err) {}
+      pointerId = null;
+      el.classList.remove('dragging');
+      el.style.zIndex = '';
+      playground.classList.remove('drag-active');
+      shredder.classList.remove('active');
+      shredderHint.classList.remove('ready');
+      shredderHint.textContent = 'drag a note here';
+
+      if (isOverShredder(e.clientX, e.clientY)) {
+        destroyPaper(el);
+      } else {
+        el.style.transform = `rotate(${(Math.random() * 6 - 3).toFixed(1)}deg)`;
+      }
+    }
+
+    el.addEventListener('pointerup', endDrag);
+    el.addEventListener('pointercancel', endDrag);
+  }
+
+  function isOverShredder(clientX, clientY) {
+    const sr = shredder.getBoundingClientRect();
+    return clientX >= sr.left - 40 && clientX <= sr.right + 40 &&
+           clientY >= sr.top - 80 && clientY <= sr.bottom + 30;
+  }
+
+  /* ============================================================
+     SHRED / DESTROY PAPER
+     ============================================================ */
+  function destroyPaper(el) {
+    if (el.classList.contains('destroying')) return;
+    el.classList.add('destroying');
+
+    const sr = shredder.getBoundingClientRect();
+    const cx = sr.left + sr.width / 2;
+    const cy = sr.top + 14;
+
+    // falling strips
+    for (let i = 0; i < 10; i++) {
+      const s = document.createElement('div');
+      s.className = 'strip';
+      s.style.left = (cx - 24 + Math.random() * 48) + 'px';
+      s.style.top  = cy + 'px';
+      s.style.animationDelay = (i * 0.035) + 's';
+      s.style.background = `hsl(${40 + Math.random() * 15}, 42%, ${90 + Math.random() * 6}%)`;
+      particlesEl.appendChild(s);
+      setTimeout(() => s.remove(), 1200);
+    }
+
+    // confetti
+    if (state.confetti) {
+      const colors = ['#7c4dff', '#4f5fe8', '#0ea968', '#fbbf24', '#f472b6', '#38bdf8'];
+      for (let i = 0; i < 20; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.background = colors[i % colors.length];
+        c.style.left = cx + 'px';
+        c.style.top  = cy + 'px';
+        const ang = (Math.PI * 2 * i) / 20 + Math.random() * 0.5;
+        const dist = 55 + Math.random() * 110;
+        c.style.setProperty('--tx', Math.cos(ang) * dist + 'px');
+        c.style.setProperty('--ty', Math.sin(ang) * dist + 30 + 'px');
+        particlesEl.appendChild(c);
+        setTimeout(() => c.remove(), 1200);
+      }
+    }
+
+    playShredSound();
+    haptic(28);
+
+    state.countReleased++;
+    bumpEl(countReleased);
+    updateStreak();
+    saveState();
+
+    // milestone feedback
+    if (state.countReleased === 1) {
+      showToast('First release. Well done.', '🌱');
+    } else if (state.countReleased === 5) {
+      showToast('5 released — finding your rhythm.', '🎯');
+    } else if (state.countReleased === 10) {
+      showToast('10 worries shredded!', '🏆');
+      playSuccessSound();
+    } else if (state.countReleased % 25 === 0) {
+      showToast(`${state.countReleased} released. Keep going.`, '✨');
+      playSuccessSound();
+    }
+
+    setTimeout(() => {
+      el.remove();
+      updateCounters();
+      checkEmpty();
+    }, 450);
+
+    shredder.classList.add('active');
+    setTimeout(() => shredder.classList.remove('active'), 620);
+  }
+
+  function checkEmpty() {
+    const remaining = playground.querySelectorAll('.paper:not(.destroying)').length;
+    if (remaining === 0) emptyHint.classList.remove('hidden');
+  }
+
+  /* ============================================================
+     SETTINGS MODAL
+     ============================================================ */
+  function openSettings() {
+    settingsBackdrop.classList.add('show');
+    haptic(6);
+  }
+
+  function closeSettings() {
+    settingsBackdrop.classList.remove('show');
+  }
+
+  settingsBtn.addEventListener('click', openSettings);
+  settingsBackdrop.addEventListener('click', (e) => {
+    if (e.target === settingsBackdrop) closeSettings();
+  });
+
+  function bindToggle(el, key) {
+    el.parentElement.addEventListener('click', () => {
+      state[key] = !state[key];
+      el.classList.toggle('on', state[key]);
+      saveState();
+      haptic(8);
+      const labels = {
+        sound: ['Sound on', 'Sound off'],
+        haptics: ['Haptics on', 'Haptics off'],
+        confetti: ['Confetti on', 'Confetti off'],
+      };
+      const icons = { sound: '🔊', haptics: '📳', confetti: '🎉' };
+      const iconsOff = { sound: '🔇', haptics: '📴', confetti: '🚫' };
+      if (state[key]) showToast(labels[key][0], icons[key]);
+      else showToast(labels[key][1], iconsOff[key]);
+    });
+  }
+
+  bindToggle(toggleSound, 'sound');
+  bindToggle(toggleHaptics, 'haptics');
+  bindToggle(toggleConfetti, 'confetti');
+
+  clearHistoryBtn.addEventListener('click', () => {
+    if (!confirm('Reset all counters, streaks, and clear all notes?')) return;
+    state.countReleased = 0;
+    state.streak = 0;
+    state.lastReleaseTime = 0;
+    updateCounters();
+    playground.querySelectorAll('.paper').forEach(p => p.remove());
+    emptyHint.classList.remove('hidden');
+    saveState();
+    closeSettings();
+    showToast('All data reset', '🧹');
+    haptic(20);
+  });
+
+  /* ============================================================
+     QUICK ACTIONS
+     ============================================================ */
+  quickAddBtn.addEventListener('click', () => {
+    worryInput.focus();
+    worryInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    haptic(6);
+  });
+
+  clearAllBtn.addEventListener('click', () => {
+    const papers = playground.querySelectorAll('.paper:not(.destroying)');
+    if (papers.length === 0) {
+      showToast('Nothing to clear', '✨');
+      return;
+    }
+    if (!confirm(`Clear ${papers.length} note${papers.length > 1 ? 's' : ''}? This won't count as released.`)) return;
+
+    papers.forEach(p => p.remove());
+    updateCounters();
+    emptyHint.classList.remove('hidden');
+    showToast('Notes cleared', '🧹');
+    haptic(12);
+  });
+
+  /* ============================================================
+     KEYBOARD SHORTCUTS
+     ============================================================ */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && settingsBackdrop.classList.contains('show')) {
+      closeSettings();
+    }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      worryInput.focus();
+    }
+  });
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  function init() {
+    loadState();
+    applyTheme();
+
+    toggleSound.classList.toggle('on', state.sound);
+    toggleHaptics.classList.toggle('on', state.haptics);
+    toggleConfetti.classList.toggle('on', state.confetti);
+
+    // reset streak if window passed
+    if (state.lastReleaseTime && (Date.now() - state.lastReleaseTime) > STREAK_WINDOW_MS) {
+      state.streak = 0;
+    }
+
+    updateCounters();
+
+    // seed a sample worry on very first visit
+    if (state.countReleased === 0 && playground.querySelectorAll('.paper').length === 0) {
+      setTimeout(() => {
+        createPaper('I have too much to do and not enough time.');
+        updateCounters();
+      }, 500);
+    }
+
+    setTimeout(() => {
+      showToast('Write a worry, then drag it into the shredder', '👋');
+    }, 900);
+  }
+
+  init();
+
+})();
+</script>
+</body>
+</html>
