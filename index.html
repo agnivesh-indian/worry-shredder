@@ -680,7 +680,7 @@
     padding: 12px 20px calc(var(--safe-bottom) + 22px);
     transform: translateY(100%);
     transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
-    max-height: 88vh;
+    max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 -12px 45px rgba(0,0,0,0.35);
     -webkit-overflow-scrolling: touch;
@@ -710,7 +710,7 @@
   }
 
   .setting-group {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
   }
 
   .setting-group:last-child { margin-bottom: 0; }
@@ -818,6 +818,136 @@
     box-shadow: var(--shadow-xs);
   }
 
+  /* ============ OPTION PICKER (segmented pills) ============ */
+  .option-picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 6px;
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .option-btn {
+    padding: 10px 8px;
+    border-radius: 9px;
+    background: transparent;
+    border: none;
+    color: var(--text-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: inherit;
+    -webkit-user-select: none;
+    user-select: none;
+    letter-spacing: 0.01em;
+  }
+
+  .option-btn:hover { color: var(--text); }
+  .option-btn:active { transform: scale(0.96); }
+  .option-btn.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-xs);
+  }
+  .option-btn.active .opt-icon { filter: none; }
+  .option-btn .opt-icon { font-size: 14px; }
+
+  /* Strength meter for vibration */
+  .strength-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 12px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .strength-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    min-width: 62px;
+  }
+
+  .strength-slider {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 40px;
+    outline: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+  }
+
+  .strength-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px; height: 22px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 2px solid var(--accent);
+    transition: transform 0.15s;
+  }
+
+  .strength-slider::-webkit-slider-thumb:active { transform: scale(1.15); }
+
+  .strength-slider::-moz-range-thumb {
+    width: 22px; height: 22px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 2px solid var(--accent);
+  }
+
+  .strength-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 38px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .test-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 11px;
+    border-radius: 11px;
+    background: var(--surface-2);
+    border: 1px dashed var(--border-strong);
+    color: var(--text-2);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .test-btn:hover { background: var(--surface-3); color: var(--text); border-color: var(--accent); }
+  .test-btn:active { transform: scale(0.98); }
+
   .about-text {
     font-size: 12px;
     color: var(--text-2);
@@ -884,7 +1014,7 @@
   .quick-btn.danger:hover { color: var(--danger); border-color: var(--danger); }
 
   /* ============ RESPONSIVE ============ */
-  @media (max-height: 660px) {
+  @media (max-height: 700px) {
     .stats { display: none; }
     .shredder { height: 72px; }
     .playground { min-height: 120px; }
@@ -994,8 +1124,9 @@
   <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
     <div class="modal-handle"></div>
     <div class="modal-title">Settings</div>
-    <div class="modal-sub">Personalize your shredding experience</div>
+    <div class="modal-sub">Customize your shredding experience</div>
 
+    <!-- APPEARANCE -->
     <div class="setting-group">
       <span class="setting-label">Appearance</span>
       <div class="theme-segmented" id="themeSegmented">
@@ -1005,15 +1136,43 @@
       </div>
     </div>
 
+    <!-- SOUND -->
     <div class="setting-group">
-      <span class="setting-label">Feedback</span>
+      <span class="setting-label">Shredder Sound</span>
       <div class="setting-row" data-setting="sound">
         <div class="setting-row-text">
           <span class="setting-row-title">Sound effects</span>
-          <span class="setting-row-desc">Subtle zip when shredding</span>
+          <span class="setting-row-desc">Enable shredding audio</span>
         </div>
         <div class="toggle" id="toggleSound"></div>
       </div>
+
+      <div class="option-picker" id="soundModelPicker" style="margin-top:6px;">
+        <button class="option-btn" data-model="classic">
+          <span class="opt-icon">🔄</span> Classic
+        </button>
+        <button class="option-btn" data-model="industrial">
+          <span class="opt-icon">🏭</span> Industrial
+        </button>
+        <button class="option-btn" data-model="heavy">
+          <span class="opt-icon">⚙️</span> Heavy Duty
+        </button>
+      </div>
+
+      <div class="strength-row">
+        <span class="strength-label">Volume</span>
+        <input type="range" class="strength-slider" id="volumeSlider" min="0" max="100" value="80">
+        <span class="strength-value" id="volumeValue">80%</span>
+      </div>
+
+      <button class="test-btn" id="testSoundBtn">
+        <span>🔊</span> Test shredding sound
+      </button>
+    </div>
+
+    <!-- VIBRATION -->
+    <div class="setting-group">
+      <span class="setting-label">Haptic Vibration</span>
       <div class="setting-row" data-setting="haptics">
         <div class="setting-row-text">
           <span class="setting-row-title">Haptic feedback</span>
@@ -1021,15 +1180,46 @@
         </div>
         <div class="toggle" id="toggleHaptics"></div>
       </div>
+
+      <div class="option-picker" id="hapticPatternPicker" style="margin-top:6px;">
+        <button class="option-btn" data-pattern="tap">
+          <span class="opt-icon">👆</span> Tap
+        </button>
+        <button class="option-btn" data-pattern="buzz">
+          <span class="opt-icon">📳</span> Buzz
+        </button>
+        <button class="option-btn" data-pattern="rumble">
+          <span class="opt-icon">💥</span> Rumble
+        </button>
+        <button class="option-btn" data-pattern="machine">
+          <span class="opt-icon">🔩</span> Machine
+        </button>
+      </div>
+
+      <div class="strength-row">
+        <span class="strength-label">Strength</span>
+        <input type="range" class="strength-slider" id="hapticStrengthSlider" min="1" max="10" value="7">
+        <span class="strength-value" id="hapticStrengthValue">7</span>
+      </div>
+
+      <button class="test-btn" id="testHapticBtn">
+        <span>📳</span> Test vibration
+      </button>
+    </div>
+
+    <!-- EFFECTS -->
+    <div class="setting-group">
+      <span class="setting-label">Visual Effects</span>
       <div class="setting-row" data-setting="confetti">
         <div class="setting-row-text">
-          <span class="setting-row-title">Celebration effects</span>
-          <span class="setting-row-desc">Confetti when shredding</span>
+          <span class="setting-row-title">Celebration confetti</span>
+          <span class="setting-row-desc">Confetti bursts when shredding</span>
         </div>
         <div class="toggle" id="toggleConfetti"></div>
       </div>
     </div>
 
+    <!-- ABOUT -->
     <div class="setting-group">
       <span class="setting-label">About</span>
       <div class="about-text">
@@ -1060,15 +1250,19 @@
   const state = {
     theme: 'system',
     sound: true,
+    soundModel: 'classic',      // classic | industrial | heavy
+    volume: 80,                 // 0-100
     haptics: true,
+    hapticPattern: 'buzz',      // tap | buzz | rumble | machine
+    hapticStrength: 7,          // 1-10
     confetti: true,
     countReleased: 0,
     lastReleaseTime: 0,
     streak: 0,
   };
 
-  const STORAGE_KEY = 'worryShredder.v2';
-  const STREAK_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+  const STORAGE_KEY = 'worryShredder.v3';
+  const STREAK_WINDOW_MS = 10 * 60 * 1000;
 
   /* ============================================================
      DOM REFS
@@ -1094,6 +1288,14 @@
   const toggleSound    = $('toggleSound');
   const toggleHaptics  = $('toggleHaptics');
   const toggleConfetti = $('toggleConfetti');
+  const soundModelPicker = $('soundModelPicker');
+  const hapticPatternPicker = $('hapticPatternPicker');
+  const volumeSlider   = $('volumeSlider');
+  const volumeValue    = $('volumeValue');
+  const hapticStrengthSlider = $('hapticStrengthSlider');
+  const hapticStrengthValue = $('hapticStrengthValue');
+  const testSoundBtn   = $('testSoundBtn');
+  const testHapticBtn  = $('testHapticBtn');
   const clearHistoryBtn = $('clearHistoryBtn');
   const quickAddBtn    = $('quickAddBtn');
   const clearAllBtn    = $('clearAllBtn');
@@ -1124,7 +1326,11 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         theme: state.theme,
         sound: state.sound,
+        soundModel: state.soundModel,
+        volume: state.volume,
         haptics: state.haptics,
+        hapticPattern: state.hapticPattern,
+        hapticStrength: state.hapticStrength,
         confetti: state.confetti,
         countReleased: state.countReleased,
         lastReleaseTime: state.lastReleaseTime,
@@ -1163,59 +1369,321 @@
   });
 
   /* ============================================================
-     HAPTIC + SOUND
+     HAPTIC ENGINE — powerful, customizable vibration
      ============================================================ */
-  function haptic(ms = 10) {
+  function haptic(intensityOverride) {
     if (!state.haptics) return;
-    if (navigator.vibrate) {
-      try { navigator.vibrate(ms); } catch (e) {}
-    }
+    if (!navigator.vibrate) return;
+
+    const strength = intensityOverride !== undefined
+      ? intensityOverride
+      : state.hapticStrength; // 1-10
+
+    // Scale factor 0.3 - 2.0 based on strength
+    const scale = 0.3 + (strength / 10) * 1.7;
+
+    try {
+      let pattern;
+
+      switch (state.hapticPattern) {
+        case 'tap':
+          // Single clean tap
+          pattern = [Math.round(15 * scale)];
+          break;
+
+        case 'buzz':
+          // Short rapid buzz (3 quick taps)
+          pattern = [
+            Math.round(20 * scale),
+            Math.round(30 / scale),
+            Math.round(20 * scale),
+            Math.round(30 / scale),
+            Math.round(25 * scale),
+          ];
+          break;
+
+        case 'rumble':
+          // Deep continuous rumble (long vibration + short echo)
+          pattern = [
+            Math.round(120 * scale),
+            Math.round(50 / scale),
+            Math.round(180 * scale),
+            Math.round(40 / scale),
+            Math.round(100 * scale),
+          ];
+          break;
+
+        case 'machine':
+          // Shredder machine feel: rapid-fire pulses
+          pattern = [
+            Math.round(30 * scale),
+            15,
+            Math.round(30 * scale),
+            15,
+            Math.round(30 * scale),
+            20,
+            Math.round(80 * scale),
+            30,
+            Math.round(140 * scale),
+          ];
+          break;
+
+        default:
+          pattern = [Math.round(30 * scale)];
+      }
+
+      navigator.vibrate(pattern);
+    } catch (e) { /* ignore */ }
   }
 
+  /* ============================================================
+     AUDIO ENGINE — powerful layered shredding sounds
+     ============================================================ */
   let audioCtx = null;
+
   function ensureAudio() {
     try {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return null;
+        audioCtx = new Ctx();
+      }
       if (audioCtx.state === 'suspended') audioCtx.resume();
       return audioCtx;
     } catch (e) { return null; }
   }
 
+  /**
+   * Generate a noise buffer for shredding texture
+   */
+  function makeNoiseBuffer(ctx, duration) {
+    const size = Math.max(1, Math.floor(ctx.sampleRate * duration));
+    const buffer = ctx.createBuffer(1, size, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < size; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+    return buffer;
+  }
+
+  /**
+   * Play the shredding sound based on selected model
+   * Models: classic | industrial | heavy
+   */
   function playShredSound() {
     if (!state.sound) return;
     const ctx = ensureAudio();
     if (!ctx) return;
 
+    const vol = Math.max(0, Math.min(1, state.volume / 100));
+    if (vol === 0) return;
+
+    const now = ctx.currentTime;
+
     try {
-      const duration = 0.28;
-      const bufferSize = ctx.sampleRate * duration;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2.2);
+      if (state.soundModel === 'classic') {
+        playClassicShred(ctx, now, vol);
+      } else if (state.soundModel === 'industrial') {
+        playIndustrialShred(ctx, now, vol);
+      } else if (state.soundModel === 'heavy') {
+        playHeavyShred(ctx, now, vol);
+      } else {
+        playClassicShred(ctx, now, vol);
       }
-      const source = ctx.createBufferSource();
-      source.buffer = buffer;
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(1400, ctx.currentTime);
-      filter.frequency.exponentialRampToValueAtTime(380, ctx.currentTime + duration);
-      filter.Q.value = 1.8;
-
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.14, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-
-      source.connect(filter).connect(gain).connect(ctx.destination);
-      source.start();
     } catch (e) { /* ignore */ }
   }
 
+  /**
+   * CLASSIC: quick paper-tear zip
+   */
+  function playClassicShred(ctx, now, vol) {
+    const duration = 0.32;
+
+    // Layer 1: filtered noise burst (paper tearing)
+    const noise = ctx.createBufferSource();
+    noise.buffer = makeNoiseBuffer(ctx, duration);
+
+    const bandpass = ctx.createBiquadFilter();
+    bandpass.type = 'bandpass';
+    bandpass.frequency.setValueAtTime(1800, now);
+    bandpass.frequency.exponentialRampToValueAtTime(400, now + duration);
+    bandpass.Q.value = 1.5;
+
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0, now);
+    noiseGain.gain.linearRampToValueAtTime(0.22 * vol, now + 0.02);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    noise.connect(bandpass).connect(noiseGain).connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + duration);
+
+    // Layer 2: low thunk (motor start)
+    const osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(90, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
+
+    const oscGain = ctx.createGain();
+    oscGain.gain.setValueAtTime(0.12 * vol, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+    const lowpass = ctx.createBiquadFilter();
+    lowpass.type = 'lowpass';
+    lowpass.frequency.value = 300;
+
+    osc.connect(lowpass).connect(oscGain).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+
+  /**
+   * INDUSTRIAL: heavier, metallic shred with grinding
+   */
+  function playIndustrialShred(ctx, now, vol) {
+    const duration = 0.55;
+
+    // Layer 1: white noise through resonant filter (grinding paper)
+    const noise = ctx.createBufferSource();
+    noise.buffer = makeNoiseBuffer(ctx, duration);
+
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.setValueAtTime(2400, now);
+    bp.frequency.exponentialRampToValueAtTime(300, now + duration);
+    bp.Q.value = 3.5;
+
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0, now);
+    noiseGain.gain.linearRampToValueAtTime(0.35 * vol, now + 0.03);
+    noiseGain.gain.setValueAtTime(0.35 * vol, now + 0.35);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    noise.connect(bp).connect(noiseGain).connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + duration);
+
+    // Layer 2: metallic motor rumble
+    const motor = ctx.createOscillator();
+    motor.type = 'square';
+    motor.frequency.setValueAtTime(65, now);
+    motor.frequency.linearRampToValueAtTime(55, now + duration * 0.7);
+    motor.frequency.exponentialRampToValueAtTime(28, now + duration);
+
+    const motorLP = ctx.createBiquadFilter();
+    motorLP.type = 'lowpass';
+    motorLP.frequency.value = 200;
+    motorLP.Q.value = 4;
+
+    const motorGain = ctx.createGain();
+    motorGain.gain.setValueAtTime(0.18 * vol, now);
+    motorGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    motor.connect(motorLP).connect(motorGain).connect(ctx.destination);
+    motor.start(now);
+    motor.stop(now + duration);
+
+    // Layer 3: metallic ping (blade strike)
+    const ping = ctx.createOscillator();
+    ping.type = 'triangle';
+    ping.frequency.setValueAtTime(1200, now + 0.05);
+    ping.frequency.exponentialRampToValueAtTime(600, now + 0.25);
+
+    const pingGain = ctx.createGain();
+    pingGain.gain.setValueAtTime(0, now);
+    pingGain.gain.linearRampToValueAtTime(0.08 * vol, now + 0.06);
+    pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+
+    ping.connect(pingGain).connect(ctx.destination);
+    ping.start(now + 0.05);
+    ping.stop(now + 0.3);
+  }
+
+  /**
+   * HEAVY DUTY: monstrous, deep, powerful shred with layered impact
+   */
+  function playHeavyShred(ctx, now, vol) {
+    const duration = 0.7;
+
+    // Layer 1: aggressive noise burst with wide sweep
+    const noise = ctx.createBufferSource();
+    noise.buffer = makeNoiseBuffer(ctx, duration);
+
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.setValueAtTime(3200, now);
+    bp.frequency.exponentialRampToValueAtTime(150, now + duration);
+    bp.Q.value = 5;
+
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0, now);
+    noiseGain.gain.linearRampToValueAtTime(0.45 * vol, now + 0.02);
+    noiseGain.gain.setValueAtTime(0.42 * vol, now + 0.4);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    noise.connect(bp).connect(noiseGain).connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + duration);
+
+    // Layer 2: deep sub-bass rumble
+    const sub = ctx.createOscillator();
+    sub.type = 'sine';
+    sub.frequency.setValueAtTime(55, now);
+    sub.frequency.exponentialRampToValueAtTime(22, now + duration);
+
+    const subGain = ctx.createGain();
+    subGain.gain.setValueAtTime(0.35 * vol, now);
+    subGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    sub.connect(subGain).connect(ctx.destination);
+    sub.start(now);
+    sub.stop(now + duration);
+
+    // Layer 3: distorted saw motor
+    const saw = ctx.createOscillator();
+    saw.type = 'sawtooth';
+    saw.frequency.setValueAtTime(110, now);
+    saw.frequency.linearRampToValueAtTime(70, now + duration * 0.6);
+    saw.frequency.exponentialRampToValueAtTime(35, now + duration);
+
+    const sawLP = ctx.createBiquadFilter();
+    sawLP.type = 'lowpass';
+    sawLP.frequency.setValueAtTime(400, now);
+    sawLP.frequency.exponentialRampToValueAtTime(120, now + duration);
+    sawLP.Q.value = 6;
+
+    const sawGain = ctx.createGain();
+    sawGain.gain.setValueAtTime(0.22 * vol, now);
+    sawGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    saw.connect(sawLP).connect(sawGain).connect(ctx.destination);
+    saw.start(now);
+    saw.stop(now + duration);
+
+    // Layer 4: metallic clang impact
+    const clang = ctx.createOscillator();
+    clang.type = 'triangle';
+    clang.frequency.setValueAtTime(880, now + 0.02);
+    clang.frequency.exponentialRampToValueAtTime(220, now + 0.4);
+
+    const clangGain = ctx.createGain();
+    clangGain.gain.setValueAtTime(0, now);
+    clangGain.gain.linearRampToValueAtTime(0.12 * vol, now + 0.03);
+    clangGain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+    clang.connect(clangGain).connect(ctx.destination);
+    clang.start(now + 0.02);
+    clang.stop(now + 0.45);
+  }
+
+  /**
+   * Success chime
+   */
   function playSuccessSound() {
     if (!state.sound) return;
     const ctx = ensureAudio();
     if (!ctx) return;
+    const vol = Math.max(0, Math.min(1, state.volume / 100));
     try {
       const now = ctx.currentTime;
       const notes = [523.25, 659.25, 783.99];
@@ -1224,12 +1692,12 @@
         const gain = ctx.createGain();
         osc.type = 'sine';
         osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0, now + i * 0.08);
-        gain.gain.linearRampToValueAtTime(0.08, now + i * 0.08 + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.32);
+        gain.gain.setValueAtTime(0, now + i * 0.09);
+        gain.gain.linearRampToValueAtTime(0.09 * vol, now + i * 0.09 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.34);
         osc.connect(gain).connect(ctx.destination);
-        osc.start(now + i * 0.08);
-        osc.stop(now + i * 0.08 + 0.38);
+        osc.start(now + i * 0.09);
+        osc.stop(now + i * 0.09 + 0.4);
       });
     } catch (e) { /* ignore */ }
   }
@@ -1311,7 +1779,7 @@
     addBtn.disabled = true;
 
     if (window.matchMedia('(pointer: fine)').matches) worryInput.focus();
-    haptic(8);
+    haptic(5); // light tap for adding
     updateCounters();
   }
 
@@ -1373,7 +1841,7 @@
       el.style.transform = 'rotate(0deg) scale(1.05)';
       el.style.zIndex = 500;
       playground.classList.add('drag-active');
-      haptic(5);
+      haptic(4);
     });
 
     el.addEventListener('pointermove', (e) => {
@@ -1471,8 +1939,9 @@
       }
     }
 
+    // POWERFUL sound + strong haptic
     playShredSound();
-    haptic(28);
+    haptic(); // uses configured pattern + strength
 
     state.countReleased++;
     bumpEl(countReleased);
@@ -1546,6 +2015,98 @@
   bindToggle(toggleHaptics, 'haptics');
   bindToggle(toggleConfetti, 'confetti');
 
+  /* ============================================================
+     SOUND MODEL PICKER
+     ============================================================ */
+  function refreshSoundModelPicker() {
+    soundModelPicker.querySelectorAll('.option-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.model === state.soundModel);
+    });
+  }
+
+  soundModelPicker.addEventListener('click', (e) => {
+    const btn = e.target.closest('.option-btn');
+    if (!btn) return;
+    state.soundModel = btn.dataset.model;
+    refreshSoundModelPicker();
+    saveState();
+    // preview
+    playShredSound();
+    haptic(6);
+    const names = { classic: 'Classic', industrial: 'Industrial', heavy: 'Heavy Duty' };
+    showToast(`${names[state.soundModel]} sound selected`, '🔊');
+  });
+
+  /* ============================================================
+     HAPTIC PATTERN PICKER
+     ============================================================ */
+  function refreshHapticPatternPicker() {
+    hapticPatternPicker.querySelectorAll('.option-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.pattern === state.hapticPattern);
+    });
+  }
+
+  hapticPatternPicker.addEventListener('click', (e) => {
+    const btn = e.target.closest('.option-btn');
+    if (!btn) return;
+    state.hapticPattern = btn.dataset.pattern;
+    refreshHapticPatternPicker();
+    saveState();
+    haptic(); // preview
+    const names = { tap: 'Tap', buzz: 'Buzz', rumble: 'Rumble', machine: 'Machine' };
+    showToast(`${names[state.hapticPattern]} vibration selected`, '📳');
+  });
+
+  /* ============================================================
+     VOLUME SLIDER
+     ============================================================ */
+  volumeSlider.addEventListener('input', () => {
+    state.volume = parseInt(volumeSlider.value, 10);
+    volumeValue.textContent = state.volume + '%';
+    saveState();
+  });
+  volumeSlider.addEventListener('change', () => {
+    // preview on release
+    playShredSound();
+    haptic(4);
+  });
+
+  /* ============================================================
+     HAPTIC STRENGTH SLIDER
+     ============================================================ */
+  hapticStrengthSlider.addEventListener('input', () => {
+    state.hapticStrength = parseInt(hapticStrengthSlider.value, 10);
+    hapticStrengthValue.textContent = state.hapticStrength;
+    saveState();
+  });
+  hapticStrengthSlider.addEventListener('change', () => {
+    haptic(); // preview at new strength
+  });
+
+  /* ============================================================
+     TEST BUTTONS
+     ============================================================ */
+  testSoundBtn.addEventListener('click', () => {
+    // Preview with current settings even if toggle is off
+    const prev = state.sound;
+    state.sound = true;
+    playShredSound();
+    state.sound = prev;
+    haptic(6);
+    showToast('Testing shredding sound', '🔊');
+  });
+
+  testHapticBtn.addEventListener('click', () => {
+    const prev = state.haptics;
+    state.haptics = true;
+    haptic();
+    state.haptics = prev;
+    showToast('Testing vibration pattern', '📳');
+  });
+
+  /* ============================================================
+     RESET
+     ============================================================ */
   clearHistoryBtn.addEventListener('click', () => {
     if (!confirm('Reset all counters, streaks, and clear all notes?')) return;
     state.countReleased = 0;
@@ -1608,6 +2169,15 @@
     toggleHaptics.classList.toggle('on', state.haptics);
     toggleConfetti.classList.toggle('on', state.confetti);
 
+    refreshSoundModelPicker();
+    refreshHapticPatternPicker();
+
+    volumeSlider.value = state.volume;
+    volumeValue.textContent = state.volume + '%';
+
+    hapticStrengthSlider.value = state.hapticStrength;
+    hapticStrengthValue.textContent = state.hapticStrength;
+
     // reset streak if window passed
     if (state.lastReleaseTime && (Date.now() - state.lastReleaseTime) > STREAK_WINDOW_MS) {
       state.streak = 0;
@@ -1615,7 +2185,7 @@
 
     updateCounters();
 
-    // seed a sample worry on very first visit
+    // seed sample worry on very first visit
     if (state.countReleased === 0 && playground.querySelectorAll('.paper').length === 0) {
       setTimeout(() => {
         createPaper('I have too much to do and not enough time.');
