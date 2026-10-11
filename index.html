@@ -440,14 +440,18 @@
   }
 
   .paper.destroying {
-    animation: shred 0.45s cubic-bezier(0.6, 0, 0.9, 0.5) forwards;
+    animation: shred 2s cubic-bezier(0.4, 0, 0.7, 1) forwards;
     pointer-events: none;
   }
 
   @keyframes shred {
     0%   { transform: scale(1) rotate(0); opacity: 1; }
-    35%  { transform: scale(0.7, 1.15) rotate(-1deg); opacity: 0.9; }
-    100% { transform: scale(0.08, 0.04) translateY(30px) rotate(2deg); opacity: 0; }
+    8%   { transform: scale(1.05, 0.95) rotate(-1deg); opacity: 1; }
+    20%  { transform: scale(0.95, 1.08) rotate(1deg); opacity: 1; }
+    40%  { transform: scale(0.8, 1.15) translateY(4px) rotate(-2deg); opacity: 0.95; }
+    60%  { transform: scale(0.55, 1.1) translateY(10px) rotate(3deg); opacity: 0.85; }
+    80%  { transform: scale(0.28, 0.7) translateY(22px) rotate(-2deg); opacity: 0.55; }
+    100% { transform: scale(0.05, 0.05) translateY(45px) rotate(5deg); opacity: 0; }
   }
 
   /* ============ SHREDDER ============ */
@@ -491,15 +495,19 @@
   .shredder.active {
     border-color: rgba(255, 120, 120, 0.55);
     box-shadow: 0 0 45px -5px rgba(255, 90, 90, 0.6), var(--shadow-lg);
-    animation: shake 0.35s ease-in-out;
+    animation: shake 2s ease-in-out;
   }
 
   @keyframes shake {
     0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-2.5px) rotate(-0.5deg); }
-    40% { transform: translateX(2.5px) rotate(0.5deg); }
-    60% { transform: translateX(-1.5px); }
-    80% { transform: translateX(1.5px); }
+    8% { transform: translateX(-2.5px) rotate(-0.5deg); }
+    16% { transform: translateX(2.5px) rotate(0.5deg); }
+    24% { transform: translateX(-2px); }
+    32% { transform: translateX(2px); }
+    40% { transform: translateX(-3px) rotate(-0.4deg); }
+    55% { transform: translateX(3px) rotate(0.4deg); }
+    70% { transform: translateX(-1.5px); }
+    85% { transform: translateX(1.5px); }
   }
 
   .slot {
@@ -531,7 +539,7 @@
   }
 
   .shredder.active .slot-teeth span {
-    animation: teeth 0.18s linear infinite;
+    animation: teeth 0.15s linear infinite;
   }
 
   @keyframes teeth {
@@ -552,6 +560,12 @@
   .shredder.active .led {
     background: var(--danger);
     box-shadow: 0 0 14px var(--danger), 0 0 3px #fff;
+    animation: ledPulse 0.4s ease-in-out infinite alternate;
+  }
+
+  @keyframes ledPulse {
+    from { opacity: 1; }
+    to { opacity: 0.55; }
   }
 
   .shredder-label {
@@ -601,25 +615,25 @@
     background: var(--paper-bg);
     border-radius: 1px;
     opacity: 0.9;
-    animation: fall 0.9s linear forwards;
+    animation: fall 2.2s cubic-bezier(0.5, 0, 0.7, 1) forwards;
   }
 
   @keyframes fall {
     0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(160px) rotate(340deg); opacity: 0; }
+    100% { transform: translateY(220px) rotate(540deg); opacity: 0; }
   }
 
   .confetti {
     position: absolute;
     width: 6px; height: 6px;
     border-radius: 1px;
-    animation: conf 1s ease-out forwards;
+    animation: conf 1.6s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
     pointer-events: none;
   }
 
   @keyframes conf {
     0% { transform: translate(0,0) rotate(0); opacity: 1; }
-    100% { transform: translate(var(--tx), var(--ty)) rotate(400deg); opacity: 0; }
+    100% { transform: translate(var(--tx), var(--ty)) rotate(600deg); opacity: 0; }
   }
 
   /* ============ TOAST ============ */
@@ -818,7 +832,7 @@
     box-shadow: var(--shadow-xs);
   }
 
-  /* ============ OPTION PICKER (segmented pills) ============ */
+  /* ============ OPTION PICKER ============ */
   .option-picker {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
@@ -856,10 +870,9 @@
     color: var(--text);
     box-shadow: var(--shadow-xs);
   }
-  .option-btn.active .opt-icon { filter: none; }
   .option-btn .opt-icon { font-size: 14px; }
 
-  /* Strength meter for vibration */
+  /* ============ STRENGTH SLIDER ============ */
   .strength-row {
     display: flex;
     align-items: center;
@@ -1142,7 +1155,7 @@
       <div class="setting-row" data-setting="sound">
         <div class="setting-row-text">
           <span class="setting-row-title">Sound effects</span>
-          <span class="setting-row-desc">Enable shredding audio</span>
+          <span class="setting-row-desc">Immersive 2-second shredding audio</span>
         </div>
         <div class="toggle" id="toggleSound"></div>
       </div>
@@ -1166,7 +1179,7 @@
       </div>
 
       <button class="test-btn" id="testSoundBtn">
-        <span>🔊</span> Test shredding sound
+        <span>🔊</span> Test full shredding sound
       </button>
     </div>
 
@@ -1176,7 +1189,7 @@
       <div class="setting-row" data-setting="haptics">
         <div class="setting-row-text">
           <span class="setting-row-title">Haptic feedback</span>
-          <span class="setting-row-desc">Vibration on mobile devices</span>
+          <span class="setting-row-desc">Strong vibration synced with shredding</span>
         </div>
         <div class="toggle" id="toggleHaptics"></div>
       </div>
@@ -1250,18 +1263,18 @@
   const state = {
     theme: 'system',
     sound: true,
-    soundModel: 'classic',      // classic | industrial | heavy
-    volume: 80,                 // 0-100
+    soundModel: 'classic',
+    volume: 80,
     haptics: true,
-    hapticPattern: 'buzz',      // tap | buzz | rumble | machine
-    hapticStrength: 7,          // 1-10
+    hapticPattern: 'buzz',
+    hapticStrength: 7,
     confetti: true,
     countReleased: 0,
     lastReleaseTime: 0,
     streak: 0,
   };
 
-  const STORAGE_KEY = 'worryShredder.v3';
+  const STORAGE_KEY = 'worryShredder.v4';
   const STREAK_WINDOW_MS = 10 * 60 * 1000;
 
   /* ============================================================
@@ -1369,7 +1382,7 @@
   });
 
   /* ============================================================
-     HAPTIC ENGINE — powerful, customizable vibration
+     HAPTIC ENGINE
      ============================================================ */
   function haptic(intensityOverride) {
     if (!state.haptics) return;
@@ -1377,22 +1390,17 @@
 
     const strength = intensityOverride !== undefined
       ? intensityOverride
-      : state.hapticStrength; // 1-10
+      : state.hapticStrength;
 
-    // Scale factor 0.3 - 2.0 based on strength
     const scale = 0.3 + (strength / 10) * 1.7;
 
     try {
       let pattern;
-
       switch (state.hapticPattern) {
         case 'tap':
-          // Single clean tap
           pattern = [Math.round(15 * scale)];
           break;
-
         case 'buzz':
-          // Short rapid buzz (3 quick taps)
           pattern = [
             Math.round(20 * scale),
             Math.round(30 / scale),
@@ -1401,9 +1409,7 @@
             Math.round(25 * scale),
           ];
           break;
-
         case 'rumble':
-          // Deep continuous rumble (long vibration + short echo)
           pattern = [
             Math.round(120 * scale),
             Math.round(50 / scale),
@@ -1412,9 +1418,7 @@
             Math.round(100 * scale),
           ];
           break;
-
         case 'machine':
-          // Shredder machine feel: rapid-fire pulses
           pattern = [
             Math.round(30 * scale),
             15,
@@ -1427,9 +1431,89 @@
             Math.round(140 * scale),
           ];
           break;
-
         default:
           pattern = [Math.round(30 * scale)];
+      }
+      navigator.vibrate(pattern);
+    } catch (e) { /* ignore */ }
+  }
+
+  /**
+   * Long synchronized haptic sequence for the entire shredding duration (~2s).
+   * It pulses through the pattern over the full duration, ending with a strong finish.
+   */
+  function hapticShredSequence() {
+    if (!state.haptics) return;
+    if (!navigator.vibrate) return;
+
+    const strength = state.hapticStrength;
+    const scale = 0.3 + (strength / 10) * 1.7;
+
+    try {
+      let pattern;
+
+      switch (state.hapticPattern) {
+        case 'tap':
+          // Single long rumble, quiet finish
+          pattern = [
+            Math.round(400 * scale),
+            Math.round(120 / scale),
+            Math.round(500 * scale),
+            Math.round(100 / scale),
+            Math.round(600 * scale),
+          ];
+          break;
+
+        case 'buzz':
+          // Rhythmic buzz throughout
+          pattern = [
+            Math.round(150 * scale), 40,
+            Math.round(150 * scale), 40,
+            Math.round(150 * scale), 40,
+            Math.round(150 * scale), 40,
+            Math.round(200 * scale), 60,
+            Math.round(250 * scale), 60,
+            Math.round(350 * scale),
+          ];
+          break;
+
+        case 'rumble':
+          // Deep continuous motor-like rumble, ramping up then finishing
+          pattern = [
+            Math.round(180 * scale), 50,
+            Math.round(220 * scale), 40,
+            Math.round(260 * scale), 40,
+            Math.round(300 * scale), 40,
+            Math.round(380 * scale), 50,
+            Math.round(500 * scale),
+          ];
+          break;
+
+        case 'machine':
+          // Rapid-fire industrial shredder feel: many quick pulses
+          // followed by a strong rumble finish
+          pattern = [
+            Math.round(40 * scale), 20,
+            Math.round(40 * scale), 20,
+            Math.round(40 * scale), 20,
+            Math.round(40 * scale), 20,
+            Math.round(40 * scale), 25,
+            Math.round(50 * scale), 25,
+            Math.round(50 * scale), 25,
+            Math.round(50 * scale), 25,
+            Math.round(60 * scale), 30,
+            Math.round(60 * scale), 30,
+            Math.round(80 * scale), 40,
+            Math.round(100 * scale), 40,
+            Math.round(150 * scale), 50,
+            Math.round(200 * scale), 50,
+            Math.round(300 * scale), 60,
+            Math.round(500 * scale),
+          ];
+          break;
+
+        default:
+          pattern = [Math.round(500 * scale)];
       }
 
       navigator.vibrate(pattern);
@@ -1437,7 +1521,7 @@
   }
 
   /* ============================================================
-     AUDIO ENGINE — powerful layered shredding sounds
+     AUDIO ENGINE — LONG, IMMERSIVE SHREDDING SOUNDS
      ============================================================ */
   let audioCtx = null;
 
@@ -1453,9 +1537,6 @@
     } catch (e) { return null; }
   }
 
-  /**
-   * Generate a noise buffer for shredding texture
-   */
   function makeNoiseBuffer(ctx, duration) {
     const size = Math.max(1, Math.floor(ctx.sampleRate * duration));
     const buffer = ctx.createBuffer(1, size, ctx.sampleRate);
@@ -1467,8 +1548,9 @@
   }
 
   /**
-   * Play the shredding sound based on selected model
-   * Models: classic | industrial | heavy
+   * Play a LONG immersive shredding sound (~2 seconds), synced with the paper's
+   * 2-second destroy animation. The sound builds up, sustains, then finishes
+   * with a satisfying end.
    */
   function playShredSound() {
     if (!state.sound) return;
@@ -1494,191 +1576,298 @@
   }
 
   /**
-   * CLASSIC: quick paper-tear zip
+   * CLASSIC — ~2 seconds
+   * A long, satisfying paper-tearing zip with a warm motor underlay that
+   * gradually slows at the end. Like a high-quality office shredder.
    */
   function playClassicShred(ctx, now, vol) {
-    const duration = 0.32;
+    const DURATION = 2.0;
 
-    // Layer 1: filtered noise burst (paper tearing)
+    // ===== Layer 1: Continuous paper-tear noise, sweeping down over time =====
     const noise = ctx.createBufferSource();
-    noise.buffer = makeNoiseBuffer(ctx, duration);
-
-    const bandpass = ctx.createBiquadFilter();
-    bandpass.type = 'bandpass';
-    bandpass.frequency.setValueAtTime(1800, now);
-    bandpass.frequency.exponentialRampToValueAtTime(400, now + duration);
-    bandpass.Q.value = 1.5;
-
-    const noiseGain = ctx.createGain();
-    noiseGain.gain.setValueAtTime(0, now);
-    noiseGain.gain.linearRampToValueAtTime(0.22 * vol, now + 0.02);
-    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-    noise.connect(bandpass).connect(noiseGain).connect(ctx.destination);
-    noise.start(now);
-    noise.stop(now + duration);
-
-    // Layer 2: low thunk (motor start)
-    const osc = ctx.createOscillator();
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(90, now);
-    osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
-
-    const oscGain = ctx.createGain();
-    oscGain.gain.setValueAtTime(0.12 * vol, now);
-    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-
-    const lowpass = ctx.createBiquadFilter();
-    lowpass.type = 'lowpass';
-    lowpass.frequency.value = 300;
-
-    osc.connect(lowpass).connect(oscGain).connect(ctx.destination);
-    osc.start(now);
-    osc.stop(now + 0.2);
-  }
-
-  /**
-   * INDUSTRIAL: heavier, metallic shred with grinding
-   */
-  function playIndustrialShred(ctx, now, vol) {
-    const duration = 0.55;
-
-    // Layer 1: white noise through resonant filter (grinding paper)
-    const noise = ctx.createBufferSource();
-    noise.buffer = makeNoiseBuffer(ctx, duration);
+    noise.buffer = makeNoiseBuffer(ctx, DURATION);
 
     const bp = ctx.createBiquadFilter();
     bp.type = 'bandpass';
-    bp.frequency.setValueAtTime(2400, now);
-    bp.frequency.exponentialRampToValueAtTime(300, now + duration);
-    bp.Q.value = 3.5;
+    bp.frequency.setValueAtTime(2200, now);
+    bp.frequency.linearRampToValueAtTime(1600, now + 0.6);
+    bp.frequency.linearRampToValueAtTime(900, now + 1.4);
+    bp.frequency.exponentialRampToValueAtTime(280, now + DURATION);
+    bp.Q.value = 1.4;
 
     const noiseGain = ctx.createGain();
     noiseGain.gain.setValueAtTime(0, now);
-    noiseGain.gain.linearRampToValueAtTime(0.35 * vol, now + 0.03);
-    noiseGain.gain.setValueAtTime(0.35 * vol, now + 0.35);
-    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    noiseGain.gain.linearRampToValueAtTime(0.28 * vol, now + 0.08);
+    noiseGain.gain.setValueAtTime(0.28 * vol, now + 1.4);
+    noiseGain.gain.linearRampToValueAtTime(0.18 * vol, now + 1.75);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
 
     noise.connect(bp).connect(noiseGain).connect(ctx.destination);
     noise.start(now);
-    noise.stop(now + duration);
+    noise.stop(now + DURATION);
 
-    // Layer 2: metallic motor rumble
+    // ===== Layer 2: Motor rumble that sustains the whole time =====
     const motor = ctx.createOscillator();
-    motor.type = 'square';
-    motor.frequency.setValueAtTime(65, now);
-    motor.frequency.linearRampToValueAtTime(55, now + duration * 0.7);
-    motor.frequency.exponentialRampToValueAtTime(28, now + duration);
+    motor.type = 'sawtooth';
+    motor.frequency.setValueAtTime(95, now);
+    motor.frequency.linearRampToValueAtTime(85, now + 0.8);
+    motor.frequency.linearRampToValueAtTime(70, now + 1.6);
+    motor.frequency.exponentialRampToValueAtTime(45, now + DURATION);
 
     const motorLP = ctx.createBiquadFilter();
     motorLP.type = 'lowpass';
-    motorLP.frequency.value = 200;
-    motorLP.Q.value = 4;
+    motorLP.frequency.setValueAtTime(280, now);
+    motorLP.frequency.linearRampToValueAtTime(200, now + DURATION);
+    motorLP.Q.value = 3;
 
     const motorGain = ctx.createGain();
-    motorGain.gain.setValueAtTime(0.18 * vol, now);
-    motorGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    motorGain.gain.setValueAtTime(0, now);
+    motorGain.gain.linearRampToValueAtTime(0.14 * vol, now + 0.12);
+    motorGain.gain.setValueAtTime(0.14 * vol, now + 1.5);
+    motorGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
 
     motor.connect(motorLP).connect(motorGain).connect(ctx.destination);
     motor.start(now);
-    motor.stop(now + duration);
+    motor.stop(now + DURATION);
 
-    // Layer 3: metallic ping (blade strike)
-    const ping = ctx.createOscillator();
-    ping.type = 'triangle';
-    ping.frequency.setValueAtTime(1200, now + 0.05);
-    ping.frequency.exponentialRampToValueAtTime(600, now + 0.25);
+    // ===== Layer 3: Subtle high-frequency paper crinkle (adds texture) =====
+    const crinkle = ctx.createBufferSource();
+    crinkle.buffer = makeNoiseBuffer(ctx, DURATION);
 
-    const pingGain = ctx.createGain();
-    pingGain.gain.setValueAtTime(0, now);
-    pingGain.gain.linearRampToValueAtTime(0.08 * vol, now + 0.06);
-    pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 3500;
 
-    ping.connect(pingGain).connect(ctx.destination);
-    ping.start(now + 0.05);
-    ping.stop(now + 0.3);
+    const crinkleGain = ctx.createGain();
+    crinkleGain.gain.setValueAtTime(0, now);
+    crinkleGain.gain.linearRampToValueAtTime(0.05 * vol, now + 0.2);
+    crinkleGain.gain.setValueAtTime(0.05 * vol, now + 1.3);
+    crinkleGain.gain.linearRampToValueAtTime(0.02 * vol, now + 1.8);
+    crinkleGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
+
+    crinkle.connect(hp).connect(crinkleGain).connect(ctx.destination);
+    crinkle.start(now);
+    crinkle.stop(now + DURATION);
+
+    // ===== Layer 4: Final "clunk" at the end =====
+    const clunkOsc = ctx.createOscillator();
+    clunkOsc.type = 'sine';
+    clunkOsc.frequency.setValueAtTime(120, now + 1.85);
+    clunkOsc.frequency.exponentialRampToValueAtTime(50, now + 2.0);
+
+    const clunkGain = ctx.createGain();
+    clunkGain.gain.setValueAtTime(0, now + 1.85);
+    clunkGain.gain.linearRampToValueAtTime(0.18 * vol, now + 1.88);
+    clunkGain.gain.exponentialRampToValueAtTime(0.001, now + 2.05);
+
+    clunkOsc.connect(clunkGain).connect(ctx.destination);
+    clunkOsc.start(now + 1.85);
+    clunkOsc.stop(now + 2.1);
   }
 
   /**
-   * HEAVY DUTY: monstrous, deep, powerful shred with layered impact
+   * INDUSTRIAL — ~2 seconds
+   * A heavier, grinding shred with metallic texture, sustained noise,
+   * and a strong motor rumble. Ends with a metallic clatter.
    */
-  function playHeavyShred(ctx, now, vol) {
-    const duration = 0.7;
+  function playIndustrialShred(ctx, now, vol) {
+    const DURATION = 2.1;
 
-    // Layer 1: aggressive noise burst with wide sweep
+    // ===== Layer 1: Wide sweeping noise (main grind) =====
     const noise = ctx.createBufferSource();
-    noise.buffer = makeNoiseBuffer(ctx, duration);
+    noise.buffer = makeNoiseBuffer(ctx, DURATION);
 
     const bp = ctx.createBiquadFilter();
     bp.type = 'bandpass';
-    bp.frequency.setValueAtTime(3200, now);
-    bp.frequency.exponentialRampToValueAtTime(150, now + duration);
-    bp.Q.value = 5;
+    bp.frequency.setValueAtTime(2800, now);
+    bp.frequency.linearRampToValueAtTime(2000, now + 0.5);
+    bp.frequency.linearRampToValueAtTime(1200, now + 1.2);
+    bp.frequency.exponentialRampToValueAtTime(350, now + DURATION);
+    bp.Q.value = 3.2;
 
     const noiseGain = ctx.createGain();
     noiseGain.gain.setValueAtTime(0, now);
-    noiseGain.gain.linearRampToValueAtTime(0.45 * vol, now + 0.02);
-    noiseGain.gain.setValueAtTime(0.42 * vol, now + 0.4);
-    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    noiseGain.gain.linearRampToValueAtTime(0.42 * vol, now + 0.06);
+    noiseGain.gain.setValueAtTime(0.42 * vol, now + 1.4);
+    noiseGain.gain.linearRampToValueAtTime(0.25 * vol, now + 1.85);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
 
     noise.connect(bp).connect(noiseGain).connect(ctx.destination);
     noise.start(now);
-    noise.stop(now + duration);
+    noise.stop(now + DURATION);
 
-    // Layer 2: deep sub-bass rumble
-    const sub = ctx.createOscillator();
-    sub.type = 'sine';
-    sub.frequency.setValueAtTime(55, now);
-    sub.frequency.exponentialRampToValueAtTime(22, now + duration);
+    // ===== Layer 2: Deep motor rumble (sustained) =====
+    const motor = ctx.createOscillator();
+    motor.type = 'square';
+    motor.frequency.setValueAtTime(72, now);
+    motor.frequency.linearRampToValueAtTime(60, now + 1.0);
+    motor.frequency.linearRampToValueAtTime(48, now + 1.7);
+    motor.frequency.exponentialRampToValueAtTime(30, now + DURATION);
 
-    const subGain = ctx.createGain();
-    subGain.gain.setValueAtTime(0.35 * vol, now);
-    subGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    const motorLP = ctx.createBiquadFilter();
+    motorLP.type = 'lowpass';
+    motorLP.frequency.value = 220;
+    motorLP.Q.value = 5;
 
-    sub.connect(subGain).connect(ctx.destination);
-    sub.start(now);
-    sub.stop(now + duration);
+    const motorGain = ctx.createGain();
+    motorGain.gain.setValueAtTime(0, now);
+    motorGain.gain.linearRampToValueAtTime(0.2 * vol, now + 0.1);
+    motorGain.gain.setValueAtTime(0.2 * vol, now + 1.6);
+    motorGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
 
-    // Layer 3: distorted saw motor
-    const saw = ctx.createOscillator();
-    saw.type = 'sawtooth';
-    saw.frequency.setValueAtTime(110, now);
-    saw.frequency.linearRampToValueAtTime(70, now + duration * 0.6);
-    saw.frequency.exponentialRampToValueAtTime(35, now + duration);
+    motor.connect(motorLP).connect(motorGain).connect(ctx.destination);
+    motor.start(now);
+    motor.stop(now + DURATION);
 
-    const sawLP = ctx.createBiquadFilter();
-    sawLP.type = 'lowpass';
-    sawLP.frequency.setValueAtTime(400, now);
-    sawLP.frequency.exponentialRampToValueAtTime(120, now + duration);
-    sawLP.Q.value = 6;
+    // ===== Layer 3: Metallic texture — multiple short pings spread across duration =====
+    const pingTimes = [0.15, 0.45, 0.75, 1.05, 1.35, 1.65, 1.9];
+    pingTimes.forEach((t, i) => {
+      const ping = ctx.createOscillator();
+      ping.type = 'triangle';
+      const baseFreq = 900 + Math.random() * 600;
+      ping.frequency.setValueAtTime(baseFreq, now + t);
+      ping.frequency.exponentialRampToValueAtTime(baseFreq * 0.5, now + t + 0.15);
 
-    const sawGain = ctx.createGain();
-    sawGain.gain.setValueAtTime(0.22 * vol, now);
-    sawGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+      const pingGain = ctx.createGain();
+      pingGain.gain.setValueAtTime(0, now + t);
+      const pingAmp = 0.05 * vol * (1 - i / pingTimes.length * 0.4);
+      pingGain.gain.linearRampToValueAtTime(pingAmp, now + t + 0.01);
+      pingGain.gain.exponentialRampToValueAtTime(0.001, now + t + 0.18);
 
-    saw.connect(sawLP).connect(sawGain).connect(ctx.destination);
-    saw.start(now);
-    saw.stop(now + duration);
+      ping.connect(pingGain).connect(ctx.destination);
+      ping.start(now + t);
+      ping.stop(now + t + 0.2);
+    });
 
-    // Layer 4: metallic clang impact
-    const clang = ctx.createOscillator();
-    clang.type = 'triangle';
-    clang.frequency.setValueAtTime(880, now + 0.02);
-    clang.frequency.exponentialRampToValueAtTime(220, now + 0.4);
+    // ===== Layer 4: Final metallic clatter at the end =====
+    for (let i = 0; i < 5; i++) {
+      const t = 1.85 + i * 0.03;
+      const clatter = ctx.createOscillator();
+      clatter.type = 'triangle';
+      const f = 1400 + Math.random() * 900;
+      clatter.frequency.setValueAtTime(f, now + t);
+      clatter.frequency.exponentialRampToValueAtTime(f * 0.4, now + t + 0.08);
 
-    const clangGain = ctx.createGain();
-    clangGain.gain.setValueAtTime(0, now);
-    clangGain.gain.linearRampToValueAtTime(0.12 * vol, now + 0.03);
-    clangGain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+      const cg = ctx.createGain();
+      cg.gain.setValueAtTime(0.06 * vol, now + t);
+      cg.gain.exponentialRampToValueAtTime(0.001, now + t + 0.1);
 
-    clang.connect(clangGain).connect(ctx.destination);
-    clang.start(now + 0.02);
-    clang.stop(now + 0.45);
+      clatter.connect(cg).connect(ctx.destination);
+      clatter.start(now + t);
+      clatter.stop(now + t + 0.12);
+    }
   }
 
   /**
-   * Success chime
+   * HEAVY DUTY — ~2.2 seconds
+   * A monstrous, deep shred with sub-bass rumble, distorted motor,
+   * sustained aggressive noise, and a powerful final impact.
    */
+  function playHeavyShred(ctx, now, vol) {
+    const DURATION = 2.2;
+
+    // ===== Layer 1: Aggressive wide-sweep noise =====
+    const noise = ctx.createBufferSource();
+    noise.buffer = makeNoiseBuffer(ctx, DURATION);
+
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.setValueAtTime(3600, now);
+    bp.frequency.linearRampToValueAtTime(2400, now + 0.5);
+    bp.frequency.linearRampToValueAtTime(1400, now + 1.2);
+    bp.frequency.linearRampToValueAtTime(700, now + 1.8);
+    bp.frequency.exponentialRampToValueAtTime(180, now + DURATION);
+    bp.Q.value = 4.5;
+
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0, now);
+    noiseGain.gain.linearRampToValueAtTime(0.5 * vol, now + 0.05);
+    noiseGain.gain.setValueAtTime(0.5 * vol, now + 1.5);
+    noiseGain.gain.linearRampToValueAtTime(0.3 * vol, now + 1.95);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
+
+    noise.connect(bp).connect(noiseGain).connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + DURATION);
+
+    // ===== Layer 2: Deep sub-bass rumble =====
+    const sub = ctx.createOscillator();
+    sub.type = 'sine';
+    sub.frequency.setValueAtTime(58, now);
+    sub.frequency.linearRampToValueAtTime(48, now + 1.0);
+    sub.frequency.linearRampToValueAtTime(38, now + 1.7);
+    sub.frequency.exponentialRampToValueAtTime(20, now + DURATION);
+
+    const subGain = ctx.createGain();
+    subGain.gain.setValueAtTime(0, now);
+    subGain.gain.linearRampToValueAtTime(0.32 * vol, now + 0.1);
+    subGain.gain.setValueAtTime(0.32 * vol, now + 1.7);
+    subGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
+
+    sub.connect(subGain).connect(ctx.destination);
+    sub.start(now);
+    sub.stop(now + DURATION);
+
+    // ===== Layer 3: Distorted saw motor (sustained) =====
+    const saw = ctx.createOscillator();
+    saw.type = 'sawtooth';
+    saw.frequency.setValueAtTime(115, now);
+    saw.frequency.linearRampToValueAtTime(95, now + 0.8);
+    saw.frequency.linearRampToValueAtTime(70, now + 1.6);
+    saw.frequency.exponentialRampToValueAtTime(35, now + DURATION);
+
+    const sawLP = ctx.createBiquadFilter();
+    sawLP.type = 'lowpass';
+    sawLP.frequency.setValueAtTime(420, now);
+    sawLP.frequency.linearRampToValueAtTime(300, now + 1.0);
+    sawLP.frequency.exponentialRampToValueAtTime(120, now + DURATION);
+    sawLP.Q.value = 6;
+
+    const sawGain = ctx.createGain();
+    sawGain.gain.setValueAtTime(0, now);
+    sawGain.gain.linearRampToValueAtTime(0.22 * vol, now + 0.08);
+    sawGain.gain.setValueAtTime(0.22 * vol, now + 1.7);
+    sawGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
+
+    saw.connect(sawLP).connect(sawGain).connect(ctx.destination);
+    saw.start(now);
+    saw.stop(now + DURATION);
+
+    // ===== Layer 4: Random metallic impact (mid and end) =====
+    const impactTimes = [0.35, 0.85, 1.35, 1.75];
+    impactTimes.forEach((t) => {
+      const imp = ctx.createOscillator();
+      imp.type = 'triangle';
+      const f = 800 + Math.random() * 700;
+      imp.frequency.setValueAtTime(f, now + t);
+      imp.frequency.exponentialRampToValueAtTime(f * 0.3, now + t + 0.25);
+
+      const ig = ctx.createGain();
+      ig.gain.setValueAtTime(0, now + t);
+      ig.gain.linearRampToValueAtTime(0.1 * vol, now + t + 0.015);
+      ig.gain.exponentialRampToValueAtTime(0.001, now + t + 0.3);
+
+      imp.connect(ig).connect(ctx.destination);
+      imp.start(now + t);
+      imp.stop(now + t + 0.35);
+    });
+
+    // ===== Layer 5: Powerful final boom =====
+    const boom = ctx.createOscillator();
+    boom.type = 'sine';
+    boom.frequency.setValueAtTime(180, now + 1.9);
+    boom.frequency.exponentialRampToValueAtTime(35, now + 2.15);
+
+    const boomGain = ctx.createGain();
+    boomGain.gain.setValueAtTime(0, now + 1.9);
+    boomGain.gain.linearRampToValueAtTime(0.35 * vol, now + 1.94);
+    boomGain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
+
+    boom.connect(boomGain).connect(ctx.destination);
+    boom.start(now + 1.9);
+    boom.stop(now + 2.25);
+  }
+
   function playSuccessSound() {
     if (!state.sound) return;
     const ctx = ensureAudio();
@@ -1779,7 +1968,7 @@
     addBtn.disabled = true;
 
     if (window.matchMedia('(pointer: fine)').matches) worryInput.focus();
-    haptic(5); // light tap for adding
+    haptic(5);
     updateCounters();
   }
 
@@ -1899,7 +2088,7 @@
   }
 
   /* ============================================================
-     SHRED / DESTROY PAPER
+     SHRED / DESTROY PAPER — 2-second animated sequence
      ============================================================ */
   function destroyPaper(el) {
     if (el.classList.contains('destroying')) return;
@@ -1909,66 +2098,84 @@
     const cx = sr.left + sr.width / 2;
     const cy = sr.top + 14;
 
-    // falling strips
-    for (let i = 0; i < 10; i++) {
+    // Extended strip emission across the 2-second duration
+    const stripCount = 40;
+    const totalDuration = 2000; // matches CSS animation
+    for (let i = 0; i < stripCount; i++) {
+      const delay = (i / stripCount) * totalDuration * 0.85;
       const s = document.createElement('div');
       s.className = 'strip';
-      s.style.left = (cx - 24 + Math.random() * 48) + 'px';
-      s.style.top  = cy + 'px';
-      s.style.animationDelay = (i * 0.035) + 's';
-      s.style.background = `hsl(${40 + Math.random() * 15}, 42%, ${90 + Math.random() * 6}%)`;
+      s.style.left = (cx - 30 + Math.random() * 60) + 'px';
+      s.style.top  = (cy + Math.random() * 12) + 'px';
+      s.style.animationDelay = delay + 'ms';
+      s.style.background = `hsl(${40 + Math.random() * 15}, 42%, ${88 + Math.random() * 8}%)`;
+      s.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
       particlesEl.appendChild(s);
-      setTimeout(() => s.remove(), 1200);
+      setTimeout(() => s.remove(), 2400 + delay);
     }
 
-    // confetti
+    // Confetti bursts spread throughout the duration (strongest at start and end)
     if (state.confetti) {
       const colors = ['#7c4dff', '#4f5fe8', '#0ea968', '#fbbf24', '#f472b6', '#38bdf8'];
-      for (let i = 0; i < 20; i++) {
-        const c = document.createElement('div');
-        c.className = 'confetti';
-        c.style.background = colors[i % colors.length];
-        c.style.left = cx + 'px';
-        c.style.top  = cy + 'px';
-        const ang = (Math.PI * 2 * i) / 20 + Math.random() * 0.5;
-        const dist = 55 + Math.random() * 110;
-        c.style.setProperty('--tx', Math.cos(ang) * dist + 'px');
-        c.style.setProperty('--ty', Math.sin(ang) * dist + 30 + 'px');
-        particlesEl.appendChild(c);
-        setTimeout(() => c.remove(), 1200);
-      }
+
+      // Initial burst
+      spawnConfetti(cx, cy, 14, colors);
+      // Mid bursts
+      setTimeout(() => spawnConfetti(cx, cy, 10, colors), 700);
+      setTimeout(() => spawnConfetti(cx, cy, 10, colors), 1300);
+      // Final burst
+      setTimeout(() => spawnConfetti(cx, cy, 20, colors), 1900);
     }
 
-    // POWERFUL sound + strong haptic
+    // ===== THE MAIN EVENT: Long immersive sound + synchronized long haptic =====
     playShredSound();
-    haptic(); // uses configured pattern + strength
+    hapticShredSequence();
 
+    // Update counters
     state.countReleased++;
     bumpEl(countReleased);
     updateStreak();
     saveState();
 
-    // milestone feedback
+    // Milestone feedback
     if (state.countReleased === 1) {
       showToast('First release. Well done.', '🌱');
     } else if (state.countReleased === 5) {
       showToast('5 released — finding your rhythm.', '🎯');
     } else if (state.countReleased === 10) {
       showToast('10 worries shredded!', '🏆');
-      playSuccessSound();
+      setTimeout(playSuccessSound, 2100);
     } else if (state.countReleased % 25 === 0) {
       showToast(`${state.countReleased} released. Keep going.`, '✨');
-      playSuccessSound();
+      setTimeout(playSuccessSound, 2100);
     }
 
+    // Shredder visual active — full 2 seconds
+    shredder.classList.add('active');
+    setTimeout(() => shredder.classList.remove('active'), 2050);
+
+    // Remove the paper element after the full animation
     setTimeout(() => {
       el.remove();
       updateCounters();
       checkEmpty();
-    }, 450);
+    }, 2000);
+  }
 
-    shredder.classList.add('active');
-    setTimeout(() => shredder.classList.remove('active'), 620);
+  function spawnConfetti(cx, cy, count, colors) {
+    for (let i = 0; i < count; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.left = cx + 'px';
+      c.style.top  = cy + 'px';
+      const ang = (Math.PI * 2 * i) / count + Math.random() * 0.6;
+      const dist = 60 + Math.random() * 130;
+      c.style.setProperty('--tx', Math.cos(ang) * dist + 'px');
+      c.style.setProperty('--ty', Math.sin(ang) * dist + 30 + 'px');
+      particlesEl.appendChild(c);
+      setTimeout(() => c.remove(), 1700);
+    }
   }
 
   function checkEmpty() {
@@ -2030,7 +2237,6 @@
     state.soundModel = btn.dataset.model;
     refreshSoundModelPicker();
     saveState();
-    // preview
     playShredSound();
     haptic(6);
     const names = { classic: 'Classic', industrial: 'Industrial', heavy: 'Heavy Duty' };
@@ -2052,13 +2258,13 @@
     state.hapticPattern = btn.dataset.pattern;
     refreshHapticPatternPicker();
     saveState();
-    haptic(); // preview
+    hapticShredSequence(); // preview full sequence
     const names = { tap: 'Tap', buzz: 'Buzz', rumble: 'Rumble', machine: 'Machine' };
     showToast(`${names[state.hapticPattern]} vibration selected`, '📳');
   });
 
   /* ============================================================
-     VOLUME SLIDER
+     SLIDERS
      ============================================================ */
   volumeSlider.addEventListener('input', () => {
     state.volume = parseInt(volumeSlider.value, 10);
@@ -2066,42 +2272,37 @@
     saveState();
   });
   volumeSlider.addEventListener('change', () => {
-    // preview on release
     playShredSound();
     haptic(4);
   });
 
-  /* ============================================================
-     HAPTIC STRENGTH SLIDER
-     ============================================================ */
   hapticStrengthSlider.addEventListener('input', () => {
     state.hapticStrength = parseInt(hapticStrengthSlider.value, 10);
     hapticStrengthValue.textContent = state.hapticStrength;
     saveState();
   });
   hapticStrengthSlider.addEventListener('change', () => {
-    haptic(); // preview at new strength
+    hapticShredSequence();
   });
 
   /* ============================================================
      TEST BUTTONS
      ============================================================ */
   testSoundBtn.addEventListener('click', () => {
-    // Preview with current settings even if toggle is off
     const prev = state.sound;
     state.sound = true;
     playShredSound();
     state.sound = prev;
     haptic(6);
-    showToast('Testing shredding sound', '🔊');
+    showToast('Testing full shredding sound', '🔊');
   });
 
   testHapticBtn.addEventListener('click', () => {
     const prev = state.haptics;
     state.haptics = true;
-    haptic();
+    hapticShredSequence();
     state.haptics = prev;
-    showToast('Testing vibration pattern', '📳');
+    showToast('Testing vibration sequence', '📳');
   });
 
   /* ============================================================
@@ -2178,14 +2379,12 @@
     hapticStrengthSlider.value = state.hapticStrength;
     hapticStrengthValue.textContent = state.hapticStrength;
 
-    // reset streak if window passed
     if (state.lastReleaseTime && (Date.now() - state.lastReleaseTime) > STREAK_WINDOW_MS) {
       state.streak = 0;
     }
 
     updateCounters();
 
-    // seed sample worry on very first visit
     if (state.countReleased === 0 && playground.querySelectorAll('.paper').length === 0) {
       setTimeout(() => {
         createPaper('I have too much to do and not enough time.');
