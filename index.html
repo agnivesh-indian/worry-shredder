@@ -125,9 +125,9 @@
     padding:
       calc(var(--safe-top) + 10px)
       calc(var(--safe-right) + 14px)
-      calc(var(--safe-bottom) + 10px)
+      calc(var(--safe-bottom) + 6px)
       calc(var(--safe-left) + 14px);
-    gap: 10px;
+    gap: 8px;
   }
 
   /* ============ HEADER ============ */
@@ -639,7 +639,7 @@
   /* ============ TOAST ============ */
   .toast {
     position: fixed;
-    bottom: calc(var(--safe-bottom) + 22px);
+    bottom: calc(var(--safe-bottom) + 60px);
     left: 50%;
     transform: translateX(-50%) translateY(20px);
     background: var(--surface);
@@ -665,7 +665,237 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  /* ============ MODAL (Settings) ============ */
+  /* ============ FOOTER ============ */
+  .footer {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 4px 0 2px;
+    font-size: 10.5px;
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+    font-weight: 500;
+    border-top: 1px solid var(--border);
+    margin-top: 2px;
+  }
+
+  .footer strong {
+    font-weight: 700;
+    color: var(--text-2);
+    letter-spacing: 0.01em;
+  }
+
+  /* ============ WELCOME MODAL ============ */
+  .welcome-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 12, 24, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 3000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .welcome-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .welcome {
+    background: var(--surface);
+    border-radius: 26px;
+    width: 100%;
+    max-width: 440px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    padding: 26px 22px 22px;
+    transform: scale(0.92) translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.6), 0 0 0 1px var(--border);
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+
+  .welcome-backdrop.show .welcome { transform: scale(1) translateY(0); }
+
+  .welcome-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    font-size: 16px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s, transform 0.15s;
+    font-family: inherit;
+    line-height: 1;
+  }
+
+  .welcome-close:hover { background: var(--surface-3); }
+  .welcome-close:active { transform: scale(0.9); }
+
+  .welcome-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: var(--accent-grad);
+    display: grid;
+    place-items: center;
+    font-size: 30px;
+    box-shadow: 0 12px 30px -10px var(--accent);
+    margin: 0 auto 16px;
+  }
+
+  .welcome-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .welcome-tagline {
+    font-size: 13px;
+    color: var(--text-3);
+    text-align: center;
+    margin-bottom: 22px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .welcome-section {
+    margin-bottom: 18px;
+  }
+
+  .welcome-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .welcome-body {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  .welcome-body strong { color: var(--text); font-weight: 600; }
+
+  .step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    background: var(--surface-2);
+    border-radius: 13px;
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+
+  .step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: var(--accent-grad);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px -4px var(--accent);
+  }
+
+  .step-text {
+    font-size: 12.5px;
+    color: var(--text-2);
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+
+  .step-text strong { color: var(--text); font-weight: 600; }
+
+  .welcome-note {
+    font-size: 11.5px;
+    color: var(--text-3);
+    line-height: 1.55;
+    background: var(--surface-2);
+    border-left: 3px solid var(--accent);
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-top: 6px;
+  }
+
+  .welcome-note strong { color: var(--text-2); }
+
+  .start-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: var(--accent-grad);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.25s;
+    box-shadow: 0 10px 24px -10px var(--accent);
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .start-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -10px var(--accent); }
+  .start-btn:active { transform: translateY(0) scale(0.985); }
+
+  .welcome-brand {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 10.5px;
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+    font-weight: 500;
+  }
+
+  .welcome-brand strong {
+    color: var(--text-2);
+    font-weight: 700;
+  }
+
+  /* ============ SETTINGS MODAL ============ */
   .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -1124,6 +1354,11 @@
     </button>
   </div>
 
+  <!-- FOOTER -->
+  <footer class="footer">
+    Copyright &copy; <strong>Lumina Psychological Solutions</strong>
+  </footer>
+
 </div>
 
 <!-- PARTICLES LAYER -->
@@ -1131,6 +1366,79 @@
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     WELCOME MODAL
+     ============================================================ -->
+<div class="welcome-backdrop" id="welcomeBackdrop">
+  <div class="welcome" role="dialog" aria-modal="true" aria-label="Welcome">
+    <button class="welcome-close" id="welcomeClose" aria-label="Close">✕</button>
+
+    <div class="welcome-icon">🧠</div>
+    <h1 class="welcome-title">Worry Shredder</h1>
+    <p class="welcome-tagline">A simple tool to externalize & release</p>
+
+    <div class="welcome-section">
+      <div class="welcome-section-title"><span>📖</span> About</div>
+      <div class="welcome-body">
+        <strong>Worry Shredder</strong> is a therapeutic tool rooted in
+        <strong>Cognitive Behavioral Therapy (CBT)</strong> and
+        <strong>Acceptance & Commitment Therapy (ACT)</strong>. It uses the
+        principles of externalization and release — writing your worries down
+        and physically "destroying" them can reduce rumination and provide
+        a genuine sense of closure.
+      </div>
+    </div>
+
+    <div class="welcome-section">
+      <div class="welcome-section-title"><span>🎯</span> How to use</div>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <strong>Write your worry.</strong> Type whatever is weighing on
+            your mind into the input box.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <strong>Add the note.</strong> Tap <strong>Add note</strong> —
+            your worry appears as a pinned card.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <strong>Drag it into the shredder.</strong> Watch, feel, and hear
+            it get destroyed in a satisfying 2-second sequence.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-text">
+            <strong>Breathe. Repeat.</strong> Track your streak and release
+            as many worries as you need.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="welcome-note">
+      <strong>Not a replacement for professional care.</strong>
+      If stress becomes persistent or overwhelming, please reach out to a
+      licensed mental health professional.
+    </div>
+
+    <button class="start-btn" id="startBtn">
+      <span>🚀</span> Start shredding
+    </button>
+
+    <div class="welcome-brand">
+      Powered by <strong>Lumina Psychological Solutions</strong>
+    </div>
+  </div>
+</div>
 
 <!-- SETTINGS MODAL -->
 <div class="modal-backdrop" id="settingsBackdrop">
@@ -1272,9 +1580,10 @@
     countReleased: 0,
     lastReleaseTime: 0,
     streak: 0,
+    hasSeenWelcome: false,
   };
 
-  const STORAGE_KEY = 'worryShredder.v4';
+  const STORAGE_KEY = 'worryShredder.v5';
   const STREAK_WINDOW_MS = 10 * 60 * 1000;
 
   /* ============================================================
@@ -1312,6 +1621,9 @@
   const clearHistoryBtn = $('clearHistoryBtn');
   const quickAddBtn    = $('quickAddBtn');
   const clearAllBtn    = $('clearAllBtn');
+  const welcomeBackdrop = $('welcomeBackdrop');
+  const welcomeClose   = $('welcomeClose');
+  const startBtn       = $('startBtn');
 
   /* ============================================================
      SLOT TEETH
@@ -1348,6 +1660,7 @@
         countReleased: state.countReleased,
         lastReleaseTime: state.lastReleaseTime,
         streak: state.streak,
+        hasSeenWelcome: state.hasSeenWelcome,
       }));
     } catch (e) { /* ignore */ }
   }
@@ -1397,51 +1710,16 @@
     try {
       let pattern;
       switch (state.hapticPattern) {
-        case 'tap':
-          pattern = [Math.round(15 * scale)];
-          break;
-        case 'buzz':
-          pattern = [
-            Math.round(20 * scale),
-            Math.round(30 / scale),
-            Math.round(20 * scale),
-            Math.round(30 / scale),
-            Math.round(25 * scale),
-          ];
-          break;
-        case 'rumble':
-          pattern = [
-            Math.round(120 * scale),
-            Math.round(50 / scale),
-            Math.round(180 * scale),
-            Math.round(40 / scale),
-            Math.round(100 * scale),
-          ];
-          break;
-        case 'machine':
-          pattern = [
-            Math.round(30 * scale),
-            15,
-            Math.round(30 * scale),
-            15,
-            Math.round(30 * scale),
-            20,
-            Math.round(80 * scale),
-            30,
-            Math.round(140 * scale),
-          ];
-          break;
-        default:
-          pattern = [Math.round(30 * scale)];
+        case 'tap':    pattern = [Math.round(15 * scale)]; break;
+        case 'buzz':   pattern = [Math.round(20 * scale), Math.round(30 / scale), Math.round(20 * scale), Math.round(30 / scale), Math.round(25 * scale)]; break;
+        case 'rumble': pattern = [Math.round(120 * scale), Math.round(50 / scale), Math.round(180 * scale), Math.round(40 / scale), Math.round(100 * scale)]; break;
+        case 'machine':pattern = [Math.round(30 * scale), 15, Math.round(30 * scale), 15, Math.round(30 * scale), 20, Math.round(80 * scale), 30, Math.round(140 * scale)]; break;
+        default:       pattern = [Math.round(30 * scale)];
       }
       navigator.vibrate(pattern);
     } catch (e) { /* ignore */ }
   }
 
-  /**
-   * Long synchronized haptic sequence for the entire shredding duration (~2s).
-   * It pulses through the pattern over the full duration, ending with a strong finish.
-   */
   function hapticShredSequence() {
     if (!state.haptics) return;
     if (!navigator.vibrate) return;
@@ -1451,77 +1729,34 @@
 
     try {
       let pattern;
-
       switch (state.hapticPattern) {
         case 'tap':
-          // Single long rumble, quiet finish
-          pattern = [
-            Math.round(400 * scale),
-            Math.round(120 / scale),
-            Math.round(500 * scale),
-            Math.round(100 / scale),
-            Math.round(600 * scale),
-          ];
+          pattern = [Math.round(400 * scale), Math.round(120 / scale), Math.round(500 * scale), Math.round(100 / scale), Math.round(600 * scale)];
           break;
-
         case 'buzz':
-          // Rhythmic buzz throughout
-          pattern = [
-            Math.round(150 * scale), 40,
-            Math.round(150 * scale), 40,
-            Math.round(150 * scale), 40,
-            Math.round(150 * scale), 40,
-            Math.round(200 * scale), 60,
-            Math.round(250 * scale), 60,
-            Math.round(350 * scale),
-          ];
+          pattern = [Math.round(150 * scale), 40, Math.round(150 * scale), 40, Math.round(150 * scale), 40, Math.round(150 * scale), 40, Math.round(200 * scale), 60, Math.round(250 * scale), 60, Math.round(350 * scale)];
           break;
-
         case 'rumble':
-          // Deep continuous motor-like rumble, ramping up then finishing
-          pattern = [
-            Math.round(180 * scale), 50,
-            Math.round(220 * scale), 40,
-            Math.round(260 * scale), 40,
-            Math.round(300 * scale), 40,
-            Math.round(380 * scale), 50,
-            Math.round(500 * scale),
-          ];
+          pattern = [Math.round(180 * scale), 50, Math.round(220 * scale), 40, Math.round(260 * scale), 40, Math.round(300 * scale), 40, Math.round(380 * scale), 50, Math.round(500 * scale)];
           break;
-
         case 'machine':
-          // Rapid-fire industrial shredder feel: many quick pulses
-          // followed by a strong rumble finish
           pattern = [
-            Math.round(40 * scale), 20,
-            Math.round(40 * scale), 20,
-            Math.round(40 * scale), 20,
-            Math.round(40 * scale), 20,
-            Math.round(40 * scale), 25,
-            Math.round(50 * scale), 25,
-            Math.round(50 * scale), 25,
-            Math.round(50 * scale), 25,
-            Math.round(60 * scale), 30,
-            Math.round(60 * scale), 30,
-            Math.round(80 * scale), 40,
-            Math.round(100 * scale), 40,
-            Math.round(150 * scale), 50,
-            Math.round(200 * scale), 50,
-            Math.round(300 * scale), 60,
+            Math.round(40 * scale), 20, Math.round(40 * scale), 20, Math.round(40 * scale), 20,
+            Math.round(40 * scale), 20, Math.round(40 * scale), 25, Math.round(50 * scale), 25,
+            Math.round(50 * scale), 25, Math.round(50 * scale), 25, Math.round(60 * scale), 30,
+            Math.round(60 * scale), 30, Math.round(80 * scale), 40, Math.round(100 * scale), 40,
+            Math.round(150 * scale), 50, Math.round(200 * scale), 50, Math.round(300 * scale), 60,
             Math.round(500 * scale),
           ];
           break;
-
-        default:
-          pattern = [Math.round(500 * scale)];
+        default: pattern = [Math.round(500 * scale)];
       }
-
       navigator.vibrate(pattern);
     } catch (e) { /* ignore */ }
   }
 
   /* ============================================================
-     AUDIO ENGINE — LONG, IMMERSIVE SHREDDING SOUNDS
+     AUDIO ENGINE
      ============================================================ */
   let audioCtx = null;
 
@@ -1541,52 +1776,29 @@
     const size = Math.max(1, Math.floor(ctx.sampleRate * duration));
     const buffer = ctx.createBuffer(1, size, ctx.sampleRate);
     const data = buffer.getChannelData(0);
-    for (let i = 0; i < size; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
+    for (let i = 0; i < size; i++) data[i] = Math.random() * 2 - 1;
     return buffer;
   }
 
-  /**
-   * Play a LONG immersive shredding sound (~2 seconds), synced with the paper's
-   * 2-second destroy animation. The sound builds up, sustains, then finishes
-   * with a satisfying end.
-   */
   function playShredSound() {
     if (!state.sound) return;
     const ctx = ensureAudio();
     if (!ctx) return;
-
     const vol = Math.max(0, Math.min(1, state.volume / 100));
     if (vol === 0) return;
-
     const now = ctx.currentTime;
-
     try {
-      if (state.soundModel === 'classic') {
-        playClassicShred(ctx, now, vol);
-      } else if (state.soundModel === 'industrial') {
-        playIndustrialShred(ctx, now, vol);
-      } else if (state.soundModel === 'heavy') {
-        playHeavyShred(ctx, now, vol);
-      } else {
-        playClassicShred(ctx, now, vol);
-      }
+      if (state.soundModel === 'classic') playClassicShred(ctx, now, vol);
+      else if (state.soundModel === 'industrial') playIndustrialShred(ctx, now, vol);
+      else if (state.soundModel === 'heavy') playHeavyShred(ctx, now, vol);
+      else playClassicShred(ctx, now, vol);
     } catch (e) { /* ignore */ }
   }
 
-  /**
-   * CLASSIC — ~2 seconds
-   * A long, satisfying paper-tearing zip with a warm motor underlay that
-   * gradually slows at the end. Like a high-quality office shredder.
-   */
   function playClassicShred(ctx, now, vol) {
     const DURATION = 2.0;
-
-    // ===== Layer 1: Continuous paper-tear noise, sweeping down over time =====
     const noise = ctx.createBufferSource();
     noise.buffer = makeNoiseBuffer(ctx, DURATION);
-
     const bp = ctx.createBiquadFilter();
     bp.type = 'bandpass';
     bp.frequency.setValueAtTime(2200, now);
@@ -1594,89 +1806,64 @@
     bp.frequency.linearRampToValueAtTime(900, now + 1.4);
     bp.frequency.exponentialRampToValueAtTime(280, now + DURATION);
     bp.Q.value = 1.4;
-
     const noiseGain = ctx.createGain();
     noiseGain.gain.setValueAtTime(0, now);
     noiseGain.gain.linearRampToValueAtTime(0.28 * vol, now + 0.08);
     noiseGain.gain.setValueAtTime(0.28 * vol, now + 1.4);
     noiseGain.gain.linearRampToValueAtTime(0.18 * vol, now + 1.75);
     noiseGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
-
     noise.connect(bp).connect(noiseGain).connect(ctx.destination);
-    noise.start(now);
-    noise.stop(now + DURATION);
+    noise.start(now); noise.stop(now + DURATION);
 
-    // ===== Layer 2: Motor rumble that sustains the whole time =====
     const motor = ctx.createOscillator();
     motor.type = 'sawtooth';
     motor.frequency.setValueAtTime(95, now);
     motor.frequency.linearRampToValueAtTime(85, now + 0.8);
     motor.frequency.linearRampToValueAtTime(70, now + 1.6);
     motor.frequency.exponentialRampToValueAtTime(45, now + DURATION);
-
     const motorLP = ctx.createBiquadFilter();
     motorLP.type = 'lowpass';
     motorLP.frequency.setValueAtTime(280, now);
     motorLP.frequency.linearRampToValueAtTime(200, now + DURATION);
     motorLP.Q.value = 3;
-
     const motorGain = ctx.createGain();
     motorGain.gain.setValueAtTime(0, now);
     motorGain.gain.linearRampToValueAtTime(0.14 * vol, now + 0.12);
     motorGain.gain.setValueAtTime(0.14 * vol, now + 1.5);
     motorGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
-
     motor.connect(motorLP).connect(motorGain).connect(ctx.destination);
-    motor.start(now);
-    motor.stop(now + DURATION);
+    motor.start(now); motor.stop(now + DURATION);
 
-    // ===== Layer 3: Subtle high-frequency paper crinkle (adds texture) =====
     const crinkle = ctx.createBufferSource();
     crinkle.buffer = makeNoiseBuffer(ctx, DURATION);
-
     const hp = ctx.createBiquadFilter();
     hp.type = 'highpass';
     hp.frequency.value = 3500;
-
     const crinkleGain = ctx.createGain();
     crinkleGain.gain.setValueAtTime(0, now);
     crinkleGain.gain.linearRampToValueAtTime(0.05 * vol, now + 0.2);
     crinkleGain.gain.setValueAtTime(0.05 * vol, now + 1.3);
     crinkleGain.gain.linearRampToValueAtTime(0.02 * vol, now + 1.8);
     crinkleGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
-
     crinkle.connect(hp).connect(crinkleGain).connect(ctx.destination);
-    crinkle.start(now);
-    crinkle.stop(now + DURATION);
+    crinkle.start(now); crinkle.stop(now + DURATION);
 
-    // ===== Layer 4: Final "clunk" at the end =====
     const clunkOsc = ctx.createOscillator();
     clunkOsc.type = 'sine';
     clunkOsc.frequency.setValueAtTime(120, now + 1.85);
     clunkOsc.frequency.exponentialRampToValueAtTime(50, now + 2.0);
-
     const clunkGain = ctx.createGain();
     clunkGain.gain.setValueAtTime(0, now + 1.85);
     clunkGain.gain.linearRampToValueAtTime(0.18 * vol, now + 1.88);
     clunkGain.gain.exponentialRampToValueAtTime(0.001, now + 2.05);
-
     clunkOsc.connect(clunkGain).connect(ctx.destination);
-    clunkOsc.start(now + 1.85);
-    clunkOsc.stop(now + 2.1);
+    clunkOsc.start(now + 1.85); clunkOsc.stop(now + 2.1);
   }
 
-  /**
-   * INDUSTRIAL — ~2 seconds
-   * A heavier, grinding shred with metallic texture, sustained noise,
-   * and a strong motor rumble. Ends with a metallic clatter.
-   */
   function playIndustrialShred(ctx, now, vol) {
     const DURATION = 2.1;
-
-    // ===== Layer 1: Wide sweeping noise (main grind) =====
     const noise = ctx.createBufferSource();
     noise.buffer = makeNoiseBuffer(ctx, DURATION);
-
     const bp = ctx.createBiquadFilter();
     bp.type = 'bandpass';
     bp.frequency.setValueAtTime(2800, now);
@@ -1684,42 +1871,33 @@
     bp.frequency.linearRampToValueAtTime(1200, now + 1.2);
     bp.frequency.exponentialRampToValueAtTime(350, now + DURATION);
     bp.Q.value = 3.2;
-
     const noiseGain = ctx.createGain();
     noiseGain.gain.setValueAtTime(0, now);
     noiseGain.gain.linearRampToValueAtTime(0.42 * vol, now + 0.06);
     noiseGain.gain.setValueAtTime(0.42 * vol, now + 1.4);
     noiseGain.gain.linearRampToValueAtTime(0.25 * vol, now + 1.85);
     noiseGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
-
     noise.connect(bp).connect(noiseGain).connect(ctx.destination);
-    noise.start(now);
-    noise.stop(now + DURATION);
+    noise.start(now); noise.stop(now + DURATION);
 
-    // ===== Layer 2: Deep motor rumble (sustained) =====
     const motor = ctx.createOscillator();
     motor.type = 'square';
     motor.frequency.setValueAtTime(72, now);
     motor.frequency.linearRampToValueAtTime(60, now + 1.0);
     motor.frequency.linearRampToValueAtTime(48, now + 1.7);
     motor.frequency.exponentialRampToValueAtTime(30, now + DURATION);
-
     const motorLP = ctx.createBiquadFilter();
     motorLP.type = 'lowpass';
     motorLP.frequency.value = 220;
     motorLP.Q.value = 5;
-
     const motorGain = ctx.createGain();
     motorGain.gain.setValueAtTime(0, now);
     motorGain.gain.linearRampToValueAtTime(0.2 * vol, now + 0.1);
     motorGain.gain.setValueAtTime(0.2 * vol, now + 1.6);
     motorGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
-
     motor.connect(motorLP).connect(motorGain).connect(ctx.destination);
-    motor.start(now);
-    motor.stop(now + DURATION);
+    motor.start(now); motor.stop(now + DURATION);
 
-    // ===== Layer 3: Metallic texture — multiple short pings spread across duration =====
     const pingTimes = [0.15, 0.45, 0.75, 1.05, 1.35, 1.65, 1.9];
     pingTimes.forEach((t, i) => {
       const ping = ctx.createOscillator();
@@ -1727,19 +1905,15 @@
       const baseFreq = 900 + Math.random() * 600;
       ping.frequency.setValueAtTime(baseFreq, now + t);
       ping.frequency.exponentialRampToValueAtTime(baseFreq * 0.5, now + t + 0.15);
-
       const pingGain = ctx.createGain();
       pingGain.gain.setValueAtTime(0, now + t);
       const pingAmp = 0.05 * vol * (1 - i / pingTimes.length * 0.4);
       pingGain.gain.linearRampToValueAtTime(pingAmp, now + t + 0.01);
       pingGain.gain.exponentialRampToValueAtTime(0.001, now + t + 0.18);
-
       ping.connect(pingGain).connect(ctx.destination);
-      ping.start(now + t);
-      ping.stop(now + t + 0.2);
+      ping.start(now + t); ping.stop(now + t + 0.2);
     });
 
-    // ===== Layer 4: Final metallic clatter at the end =====
     for (let i = 0; i < 5; i++) {
       const t = 1.85 + i * 0.03;
       const clatter = ctx.createOscillator();
@@ -1747,29 +1921,18 @@
       const f = 1400 + Math.random() * 900;
       clatter.frequency.setValueAtTime(f, now + t);
       clatter.frequency.exponentialRampToValueAtTime(f * 0.4, now + t + 0.08);
-
       const cg = ctx.createGain();
       cg.gain.setValueAtTime(0.06 * vol, now + t);
       cg.gain.exponentialRampToValueAtTime(0.001, now + t + 0.1);
-
       clatter.connect(cg).connect(ctx.destination);
-      clatter.start(now + t);
-      clatter.stop(now + t + 0.12);
+      clatter.start(now + t); clatter.stop(now + t + 0.12);
     }
   }
 
-  /**
-   * HEAVY DUTY — ~2.2 seconds
-   * A monstrous, deep shred with sub-bass rumble, distorted motor,
-   * sustained aggressive noise, and a powerful final impact.
-   */
   function playHeavyShred(ctx, now, vol) {
     const DURATION = 2.2;
-
-    // ===== Layer 1: Aggressive wide-sweep noise =====
     const noise = ctx.createBufferSource();
     noise.buffer = makeNoiseBuffer(ctx, DURATION);
-
     const bp = ctx.createBiquadFilter();
     bp.type = 'bandpass';
     bp.frequency.setValueAtTime(3600, now);
@@ -1778,62 +1941,49 @@
     bp.frequency.linearRampToValueAtTime(700, now + 1.8);
     bp.frequency.exponentialRampToValueAtTime(180, now + DURATION);
     bp.Q.value = 4.5;
-
     const noiseGain = ctx.createGain();
     noiseGain.gain.setValueAtTime(0, now);
     noiseGain.gain.linearRampToValueAtTime(0.5 * vol, now + 0.05);
     noiseGain.gain.setValueAtTime(0.5 * vol, now + 1.5);
     noiseGain.gain.linearRampToValueAtTime(0.3 * vol, now + 1.95);
     noiseGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
-
     noise.connect(bp).connect(noiseGain).connect(ctx.destination);
-    noise.start(now);
-    noise.stop(now + DURATION);
+    noise.start(now); noise.stop(now + DURATION);
 
-    // ===== Layer 2: Deep sub-bass rumble =====
     const sub = ctx.createOscillator();
     sub.type = 'sine';
     sub.frequency.setValueAtTime(58, now);
     sub.frequency.linearRampToValueAtTime(48, now + 1.0);
     sub.frequency.linearRampToValueAtTime(38, now + 1.7);
     sub.frequency.exponentialRampToValueAtTime(20, now + DURATION);
-
     const subGain = ctx.createGain();
     subGain.gain.setValueAtTime(0, now);
     subGain.gain.linearRampToValueAtTime(0.32 * vol, now + 0.1);
     subGain.gain.setValueAtTime(0.32 * vol, now + 1.7);
     subGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
-
     sub.connect(subGain).connect(ctx.destination);
-    sub.start(now);
-    sub.stop(now + DURATION);
+    sub.start(now); sub.stop(now + DURATION);
 
-    // ===== Layer 3: Distorted saw motor (sustained) =====
     const saw = ctx.createOscillator();
     saw.type = 'sawtooth';
     saw.frequency.setValueAtTime(115, now);
     saw.frequency.linearRampToValueAtTime(95, now + 0.8);
     saw.frequency.linearRampToValueAtTime(70, now + 1.6);
     saw.frequency.exponentialRampToValueAtTime(35, now + DURATION);
-
     const sawLP = ctx.createBiquadFilter();
     sawLP.type = 'lowpass';
     sawLP.frequency.setValueAtTime(420, now);
     sawLP.frequency.linearRampToValueAtTime(300, now + 1.0);
     sawLP.frequency.exponentialRampToValueAtTime(120, now + DURATION);
     sawLP.Q.value = 6;
-
     const sawGain = ctx.createGain();
     sawGain.gain.setValueAtTime(0, now);
     sawGain.gain.linearRampToValueAtTime(0.22 * vol, now + 0.08);
     sawGain.gain.setValueAtTime(0.22 * vol, now + 1.7);
     sawGain.gain.exponentialRampToValueAtTime(0.001, now + DURATION);
-
     saw.connect(sawLP).connect(sawGain).connect(ctx.destination);
-    saw.start(now);
-    saw.stop(now + DURATION);
+    saw.start(now); saw.stop(now + DURATION);
 
-    // ===== Layer 4: Random metallic impact (mid and end) =====
     const impactTimes = [0.35, 0.85, 1.35, 1.75];
     impactTimes.forEach((t) => {
       const imp = ctx.createOscillator();
@@ -1841,31 +1991,24 @@
       const f = 800 + Math.random() * 700;
       imp.frequency.setValueAtTime(f, now + t);
       imp.frequency.exponentialRampToValueAtTime(f * 0.3, now + t + 0.25);
-
       const ig = ctx.createGain();
       ig.gain.setValueAtTime(0, now + t);
       ig.gain.linearRampToValueAtTime(0.1 * vol, now + t + 0.015);
       ig.gain.exponentialRampToValueAtTime(0.001, now + t + 0.3);
-
       imp.connect(ig).connect(ctx.destination);
-      imp.start(now + t);
-      imp.stop(now + t + 0.35);
+      imp.start(now + t); imp.stop(now + t + 0.35);
     });
 
-    // ===== Layer 5: Powerful final boom =====
     const boom = ctx.createOscillator();
     boom.type = 'sine';
     boom.frequency.setValueAtTime(180, now + 1.9);
     boom.frequency.exponentialRampToValueAtTime(35, now + 2.15);
-
     const boomGain = ctx.createGain();
     boomGain.gain.setValueAtTime(0, now + 1.9);
     boomGain.gain.linearRampToValueAtTime(0.35 * vol, now + 1.94);
     boomGain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
-
     boom.connect(boomGain).connect(ctx.destination);
-    boom.start(now + 1.9);
-    boom.stop(now + 2.25);
+    boom.start(now + 1.9); boom.stop(now + 2.25);
   }
 
   function playSuccessSound() {
@@ -1875,8 +2018,7 @@
     const vol = Math.max(0, Math.min(1, state.volume / 100));
     try {
       const now = ctx.currentTime;
-      const notes = [523.25, 659.25, 783.99];
-      notes.forEach((freq, i) => {
+      [523.25, 659.25, 783.99].forEach((freq, i) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
@@ -1885,8 +2027,7 @@
         gain.gain.linearRampToValueAtTime(0.09 * vol, now + i * 0.09 + 0.02);
         gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.34);
         osc.connect(gain).connect(ctx.destination);
-        osc.start(now + i * 0.09);
-        osc.stop(now + i * 0.09 + 0.4);
+        osc.start(now + i * 0.09); osc.stop(now + i * 0.09 + 0.4);
       });
     } catch (e) { /* ignore */ }
   }
@@ -1959,14 +2100,12 @@
   function addWorry() {
     const text = worryInput.value.trim();
     if (!text) return;
-
     createPaper(text);
     worryInput.value = '';
     worryInput.style.height = '44px';
     charCount.textContent = '0 / 140';
     charCount.classList.remove('warn');
     addBtn.disabled = true;
-
     if (window.matchMedia('(pointer: fine)').matches) worryInput.focus();
     haptic(5);
     updateCounters();
@@ -1980,7 +2119,6 @@
       <div class="text">${escapeHtml(text)}</div>
       <div class="hint">drag → shred</div>
     `;
-
     const pw = playground.clientWidth;
     const ph = playground.clientHeight;
     const cardW = paper.offsetWidth || 116;
@@ -1992,10 +2130,8 @@
     paper.style.left = x + 'px';
     paper.style.top = y + 'px';
     paper.style.transform = `rotate(${(Math.random() * 6 - 3).toFixed(1)}deg)`;
-
     playground.appendChild(paper);
     emptyHint.classList.add('hidden');
-
     makeDraggable(paper);
     return paper;
   }
@@ -2016,16 +2152,11 @@
     el.addEventListener('pointerdown', (e) => {
       if (el.classList.contains('destroying')) return;
       e.preventDefault();
-
       pointerId = e.pointerId;
       try { el.setPointerCapture(pointerId); } catch (err) {}
-
       moved = false;
-      startX = e.clientX;
-      startY = e.clientY;
-      origX = el.offsetLeft;
-      origY = el.offsetTop;
-
+      startX = e.clientX; startY = e.clientY;
+      origX = el.offsetLeft; origY = el.offsetTop;
       el.classList.add('dragging');
       el.style.transform = 'rotate(0deg) scale(1.05)';
       el.style.zIndex = 500;
@@ -2037,17 +2168,13 @@
       if (pointerId !== e.pointerId) return;
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
-
       if (!moved && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) moved = true;
-
       const pw = playground.clientWidth - el.offsetWidth;
       const ph = playground.clientHeight - el.offsetHeight;
       const nx = Math.min(pw, Math.max(0, origX + dx));
       const ny = Math.min(ph, Math.max(0, origY + dy));
-
       el.style.left = nx + 'px';
       el.style.top  = ny + 'px';
-
       if (isOverShredder(e.clientX, e.clientY)) {
         shredder.classList.add('active');
         shredderHint.classList.add('ready');
@@ -2069,7 +2196,6 @@
       shredder.classList.remove('active');
       shredderHint.classList.remove('ready');
       shredderHint.textContent = 'drag a note here';
-
       if (isOverShredder(e.clientX, e.clientY)) {
         destroyPaper(el);
       } else {
@@ -2088,7 +2214,7 @@
   }
 
   /* ============================================================
-     SHRED / DESTROY PAPER — 2-second animated sequence
+     SHRED / DESTROY PAPER
      ============================================================ */
   function destroyPaper(el) {
     if (el.classList.contains('destroying')) return;
@@ -2098,9 +2224,8 @@
     const cx = sr.left + sr.width / 2;
     const cy = sr.top + 14;
 
-    // Extended strip emission across the 2-second duration
     const stripCount = 40;
-    const totalDuration = 2000; // matches CSS animation
+    const totalDuration = 2000;
     for (let i = 0; i < stripCount; i++) {
       const delay = (i / stripCount) * totalDuration * 0.85;
       const s = document.createElement('div');
@@ -2114,47 +2239,30 @@
       setTimeout(() => s.remove(), 2400 + delay);
     }
 
-    // Confetti bursts spread throughout the duration (strongest at start and end)
     if (state.confetti) {
       const colors = ['#7c4dff', '#4f5fe8', '#0ea968', '#fbbf24', '#f472b6', '#38bdf8'];
-
-      // Initial burst
       spawnConfetti(cx, cy, 14, colors);
-      // Mid bursts
       setTimeout(() => spawnConfetti(cx, cy, 10, colors), 700);
       setTimeout(() => spawnConfetti(cx, cy, 10, colors), 1300);
-      // Final burst
       setTimeout(() => spawnConfetti(cx, cy, 20, colors), 1900);
     }
 
-    // ===== THE MAIN EVENT: Long immersive sound + synchronized long haptic =====
     playShredSound();
     hapticShredSequence();
 
-    // Update counters
     state.countReleased++;
     bumpEl(countReleased);
     updateStreak();
     saveState();
 
-    // Milestone feedback
-    if (state.countReleased === 1) {
-      showToast('First release. Well done.', '🌱');
-    } else if (state.countReleased === 5) {
-      showToast('5 released — finding your rhythm.', '🎯');
-    } else if (state.countReleased === 10) {
-      showToast('10 worries shredded!', '🏆');
-      setTimeout(playSuccessSound, 2100);
-    } else if (state.countReleased % 25 === 0) {
-      showToast(`${state.countReleased} released. Keep going.`, '✨');
-      setTimeout(playSuccessSound, 2100);
-    }
+    if (state.countReleased === 1) showToast('First release. Well done.', '🌱');
+    else if (state.countReleased === 5) showToast('5 released — finding your rhythm.', '🎯');
+    else if (state.countReleased === 10) { showToast('10 worries shredded!', '🏆'); setTimeout(playSuccessSound, 2100); }
+    else if (state.countReleased % 25 === 0) { showToast(`${state.countReleased} released. Keep going.`, '✨'); setTimeout(playSuccessSound, 2100); }
 
-    // Shredder visual active — full 2 seconds
     shredder.classList.add('active');
     setTimeout(() => shredder.classList.remove('active'), 2050);
 
-    // Remove the paper element after the full animation
     setTimeout(() => {
       el.remove();
       updateCounters();
@@ -2184,6 +2292,31 @@
   }
 
   /* ============================================================
+     WELCOME MODAL
+     ============================================================ */
+  function openWelcome() {
+    welcomeBackdrop.classList.add('show');
+  }
+
+  function closeWelcome() {
+    welcomeBackdrop.classList.remove('show');
+    state.hasSeenWelcome = true;
+    saveState();
+  }
+
+  welcomeClose.addEventListener('click', closeWelcome);
+  startBtn.addEventListener('click', () => {
+    closeWelcome();
+    haptic(10);
+    setTimeout(() => {
+      if (window.matchMedia('(pointer: fine)').matches) worryInput.focus();
+    }, 350);
+  });
+  welcomeBackdrop.addEventListener('click', (e) => {
+    if (e.target === welcomeBackdrop) closeWelcome();
+  });
+
+  /* ============================================================
      SETTINGS MODAL
      ============================================================ */
   function openSettings() {
@@ -2206,11 +2339,7 @@
       el.classList.toggle('on', state[key]);
       saveState();
       haptic(8);
-      const labels = {
-        sound: ['Sound on', 'Sound off'],
-        haptics: ['Haptics on', 'Haptics off'],
-        confetti: ['Confetti on', 'Confetti off'],
-      };
+      const labels = { sound: ['Sound on', 'Sound off'], haptics: ['Haptics on', 'Haptics off'], confetti: ['Confetti on', 'Confetti off'] };
       const icons = { sound: '🔊', haptics: '📳', confetti: '🎉' };
       const iconsOff = { sound: '🔇', haptics: '📴', confetti: '🚫' };
       if (state[key]) showToast(labels[key][0], icons[key]);
@@ -2222,9 +2351,6 @@
   bindToggle(toggleHaptics, 'haptics');
   bindToggle(toggleConfetti, 'confetti');
 
-  /* ============================================================
-     SOUND MODEL PICKER
-     ============================================================ */
   function refreshSoundModelPicker() {
     soundModelPicker.querySelectorAll('.option-btn').forEach(b => {
       b.classList.toggle('active', b.dataset.model === state.soundModel);
@@ -2243,9 +2369,6 @@
     showToast(`${names[state.soundModel]} sound selected`, '🔊');
   });
 
-  /* ============================================================
-     HAPTIC PATTERN PICKER
-     ============================================================ */
   function refreshHapticPatternPicker() {
     hapticPatternPicker.querySelectorAll('.option-btn').forEach(b => {
       b.classList.toggle('active', b.dataset.pattern === state.hapticPattern);
@@ -2258,36 +2381,25 @@
     state.hapticPattern = btn.dataset.pattern;
     refreshHapticPatternPicker();
     saveState();
-    hapticShredSequence(); // preview full sequence
+    hapticShredSequence();
     const names = { tap: 'Tap', buzz: 'Buzz', rumble: 'Rumble', machine: 'Machine' };
     showToast(`${names[state.hapticPattern]} vibration selected`, '📳');
   });
 
-  /* ============================================================
-     SLIDERS
-     ============================================================ */
   volumeSlider.addEventListener('input', () => {
     state.volume = parseInt(volumeSlider.value, 10);
     volumeValue.textContent = state.volume + '%';
     saveState();
   });
-  volumeSlider.addEventListener('change', () => {
-    playShredSound();
-    haptic(4);
-  });
+  volumeSlider.addEventListener('change', () => { playShredSound(); haptic(4); });
 
   hapticStrengthSlider.addEventListener('input', () => {
     state.hapticStrength = parseInt(hapticStrengthSlider.value, 10);
     hapticStrengthValue.textContent = state.hapticStrength;
     saveState();
   });
-  hapticStrengthSlider.addEventListener('change', () => {
-    hapticShredSequence();
-  });
+  hapticStrengthSlider.addEventListener('change', () => { hapticShredSequence(); });
 
-  /* ============================================================
-     TEST BUTTONS
-     ============================================================ */
   testSoundBtn.addEventListener('click', () => {
     const prev = state.sound;
     state.sound = true;
@@ -2305,9 +2417,6 @@
     showToast('Testing vibration sequence', '📳');
   });
 
-  /* ============================================================
-     RESET
-     ============================================================ */
   clearHistoryBtn.addEventListener('click', () => {
     if (!confirm('Reset all counters, streaks, and clear all notes?')) return;
     state.countReleased = 0;
@@ -2333,12 +2442,8 @@
 
   clearAllBtn.addEventListener('click', () => {
     const papers = playground.querySelectorAll('.paper:not(.destroying)');
-    if (papers.length === 0) {
-      showToast('Nothing to clear', '✨');
-      return;
-    }
+    if (papers.length === 0) { showToast('Nothing to clear', '✨'); return; }
     if (!confirm(`Clear ${papers.length} note${papers.length > 1 ? 's' : ''}? This won't count as released.`)) return;
-
     papers.forEach(p => p.remove());
     updateCounters();
     emptyHint.classList.remove('hidden');
@@ -2350,8 +2455,9 @@
      KEYBOARD SHORTCUTS
      ============================================================ */
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && settingsBackdrop.classList.contains('show')) {
-      closeSettings();
+    if (e.key === 'Escape') {
+      if (settingsBackdrop.classList.contains('show')) closeSettings();
+      else if (welcomeBackdrop.classList.contains('show')) closeWelcome();
     }
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
@@ -2385,6 +2491,7 @@
 
     updateCounters();
 
+    // Seed sample worry on very first visit
     if (state.countReleased === 0 && playground.querySelectorAll('.paper').length === 0) {
       setTimeout(() => {
         createPaper('I have too much to do and not enough time.');
@@ -2392,9 +2499,14 @@
       }, 500);
     }
 
-    setTimeout(() => {
-      showToast('Write a worry, then drag it into the shredder', '👋');
-    }, 900);
+    // Show welcome on first visit
+    if (!state.hasSeenWelcome) {
+      setTimeout(openWelcome, 400);
+    } else {
+      setTimeout(() => {
+        showToast('Write a worry, then drag it into the shredder', '👋');
+      }, 900);
+    }
   }
 
   init();
